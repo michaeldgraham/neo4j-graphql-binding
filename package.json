@@ -1,7 +1,7 @@
 {
   "name": "neo4j-graphql-binding",
-  "version": "0.1.3",
-  "description": "A GraphQL binding for a Neo4j GraphQL API.",
+  "version": "0.1.5",
+  "description": "A GraphQL binding for your Neo4j GraphQL API.",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src --out-dir dist"
