@@ -53,7 +53,7 @@ server.start(options, ({ port }) => {
 
 ```
 In your schema, the binding is accessed to send a request to your Neo4j Graphql server to process any <code>query</code> or <code>mutation</code> in your <code>typeDefs</code> that has a <code>@cypher</code> directive. 
-Note that the createPerson mutation formats its return data into a JSON that matches the custom payload type createPersonPayload. This is possible with some Cypher features released in Neo4j 3.1 (see: https://neo4j.com/blog/cypher-graphql-neo4j-3-1-preview/).
+Note that the @cypher directive on the createPerson mutation formats its return data into a JSON that matches the custom payload type createPersonPayload. This is possible with some Cypher features released in Neo4j 3.1 (see: https://neo4j.com/blog/cypher-graphql-neo4j-3-1-preview/).
 
 <code>schema.js</code>
 ```js
