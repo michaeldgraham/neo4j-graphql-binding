@@ -1,9 +1,7 @@
-import fetch from 'cross-fetch';
 import { print } from 'graphql';
 import { Binding  } from 'graphql-binding';
-import { HttpLink } from 'apollo-link-http';
 import { ApolloLink, Observable } from 'apollo-link';
-import { makeRemoteExecutableSchema, introspectSchema } from 'graphql-tools';
+import { makeRemoteExecutableSchema } from 'graphql-tools';
 
 export const neo4jGraphQLBinding = (opt) => {
   const { driver, typeDefs } = opt;
@@ -17,13 +15,13 @@ export const neo4jGraphQLBinding = (opt) => {
   });
 };
 
-export const neo4jExecute = async (params, ctx, info) => {
+export const neo4jExecute = (params, ctx, info) => {
   switch(info.parentType.name) {
     case "Mutation": {
-      return await neo4jMutation(params, ctx, info);
+      return neo4jMutation(params, ctx, info);
     }
     case "Query": {
-      return await neo4jQuery(params, ctx, info);
+      return neo4jQuery(params, ctx, info);
     }
     case 'Subscription': {
       throw Error(`Subscriptions not yet supported by neo4j-graphql-binding`);
@@ -32,12 +30,12 @@ export const neo4jExecute = async (params, ctx, info) => {
   throw Error(`Unsupported value for parentType.name`);
 }
 
-const neo4jMutation = async (params, ctx, info) => {
-  return await ctx.neo4j.mutation[info.fieldName](params, ctx, info);
+const neo4jMutation = (params, ctx, info) => {
+  return ctx.neo4j.mutation[info.fieldName](params, ctx, info);
 }
 
-const neo4jQuery = async (params, ctx, info) => {
-  return await ctx.neo4j.query[info.fieldName](params, ctx, info);
+const neo4jQuery = (params, ctx, info) => {
+  return ctx.neo4j.query[info.fieldName](params, ctx, info);
 }
 
 const neo4jGraphqlLink = (driver) => {
@@ -62,9 +60,9 @@ const transformVariables = (params) => {
   return transformed.join(',\n');
 };
 
-const neo4jGraphqlIdl = async (driver, schema) => {
+const neo4jGraphqlIdl = (driver, schema) => {
   const session = driver.session();
-  await session
+  session
     .run('CALL graphql.idl({schema})', {schema: schema})
     .then(function (result) {
       session.close();
