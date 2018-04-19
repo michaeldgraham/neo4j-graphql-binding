@@ -1,7 +1,5 @@
 # neo4j-graphql-binding
 
-[![NPM](https://img.shields.io/npm/v/neo4j-graphql-binding.svg?style=flat-square)](https://www.npmjs.com/package/neo4j-graphql-binding)
-
 ### Overview
 <code>neo4j-graphql-binding</code> provides a quick way to embed a [Neo4j Graph Database](https://neo4j.com/product/) GraphQL API (using the [neo4j-graphql](https://github.com/neo4j-graphql/neo4j-graphql) plugin) into your local GraphQL server.
 
@@ -52,7 +50,7 @@ server.start(options, ({ port }) => {
 });
 
 ```
-In your schema, the binding is accessed to send a request to your Neo4j Graphql server to process any <code>query</code> or <code>mutation</code> in your <code>typeDefs</code> that has a <code>@cypher</code> directive. 
+In your schema, the binding is accessed to send a request to your Neo4j Graphql server to process any <code>query</code> or <code>mutation</code> in your <code>typeDefs</code> that has a <code>@cypher</code> directive.
 Note that the @cypher directive on the createPerson mutation formats its return data into a JSON that matches the custom payload type createPersonPayload. This is possible with some Cypher features released in Neo4j 3.1 (see: https://neo4j.com/blog/cypher-graphql-neo4j-3-1-preview/).
 
 <code>schema.js</code>
