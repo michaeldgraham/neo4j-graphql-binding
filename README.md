@@ -54,7 +54,8 @@ const localSchema = makeExecutableSchema({
 
 const neo4jGraphqlAPI = neo4jGraphQLBinding({
   typeDefs: typeDefs,
-  driver: driver
+  driver: driver,
+  log: true // default: false
 });
 
 const server = new GraphQLServer({
