@@ -13,11 +13,13 @@
 	- [Request Examples](#request-examples)
 - [Auto-Generated Query Types and Mutations](#auto-generated-query-types-and-mutations)
 	- [Request Examples](#request-examples)
+- [TODO](#todo)
 - [License](#license)
 
 <!-- /TOC -->
 
 ### Overview
+If you're new to using Neo4j Graph Databases or the neo4j-graphql plugin, here is a good article to get started: [Using the neo4j-graphql plugin in Neo4j Desktop](https://blog.grandstack.io/using-the-neo4j-graphql-plugin-in-neo4j-desktop-c8a60aa014d9)
 
 ##### neo4jGraphQLBinding
 In your server setup, you use <code>neo4jGraphQLBinding</code> to create a [GraphQL binding](https://www.npmjs.com/package/graphql-binding) to your Neo4j server and set the binding into your request context. The binding can then be accessed in your local resolvers to send requests to your remote Neo4j GraphQL server for any <code>query</code> or <code>mutation</code> in your <code>typeDefs</code> with a [@cypher directive](https://neo4j.com/developer/graphql/#_neo4j_graphql_extension). Queries use the read only [graphql.query](https://github.com/neo4j-graphql/neo4j-graphql/tree/3.3#procedures) procedure and mutations use the read/write [graphql.execute](https://github.com/neo4j-graphql/neo4j-graphql/tree/3.3#procedures) procedure.
@@ -226,7 +228,7 @@ import { typeDefs, resolvers } from './schema.js';
 
 const driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("user", "password"));
 
-const neo4jTypeDefs = buildNeo4jTypeDefs({ 
+const neo4jTypeDefs = buildNeo4jTypeDefs({
   typeDefs: typeDefs,
   query: true, // default
   mutation: true // default
@@ -315,5 +317,12 @@ mutation createPerson($name: String) {
   }
 }
 ```
+### TODO
+- Progressively update what <code>buildNeo4jTypeDefs</code> generates as the <code>neo4j-graphql</code> plugin improves.
+- Generate the same schema description comments that neo4j-graphql adds to its schema (the comments show up in GraphQL Playground's schema display).
+- Document API using JSDoc.
+- Provide more examples for complex queries and mutations in github repo.
+- Look into ways to generate the cypher for complex mutations that use @cypher directives.
+
 ### License
 The code is available under the [MIT](LICENSE) license.
