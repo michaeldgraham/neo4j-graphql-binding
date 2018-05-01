@@ -269,7 +269,7 @@ export const resolvers = {
 }
 ```
 ##### Request Examples
-To query for someone's first two friends, in ascending order:
+To query for Finn's first two friends, in ascending order:
 
 <code>readPersonAndFriends.graphql</code>
 ```js
