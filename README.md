@@ -243,7 +243,7 @@ const localSchema = makeExecutableSchema({
 
 ...
 ```
-If you already have a Person query or a createPerson mutation, <code>buildNeo4jTypeDefs</code> <b>will not overwrite</b> them. In this case, the following query type would be added to your typeDefs:
+If you already have a Person query or a createPerson mutation, <code>buildNeo4jTypeDefs</code> <b>will not overwrite</b> them. In this case, the following query type would be added to your typeDefs along with the same arguments <code>neo4j-graphql</code> generates (to learn more about these arguments, see: https://github.com/neo4j-graphql/neo4j-graphql/tree/3.3#auto-generated-query-types).
 ```js
 Person(name, names, orderBy, _id, _ids, first, offset): [Person]
 ```
