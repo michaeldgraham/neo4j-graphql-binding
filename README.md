@@ -208,11 +208,11 @@ mutation createPerson($person: createPersonInput!) {
 First, add the @model type directive to any type for which you want query and mutation types to be generated.
 ```js
 type Person @model {
-	name: String
-	friends: [Person] @relation(
-		name: "friend",
-		direction: OUT
-	)
+  name: String
+  friends: [Person] @relation(
+    name: "friend",
+    direction: OUT
+  )
 }
 ```
 Next, use <code>buildNeo4jTypeDefs</code> in your server setup to generate those queries and mutations into your typeDefs and use the result in both your binding and your schema.
@@ -220,13 +220,13 @@ Next, use <code>buildNeo4jTypeDefs</code> in your server setup to generate those
 const neo4jTypeDefs = buildNeo4jTypeDefs({ typeDefs: typeDefs });
 
 const neo4jGraphqlAPI = neo4jGraphQLBinding({
-	typeDefs: neo4jTypeDefs,
-	driver: driver
+  typeDefs: neo4jTypeDefs,
+  driver: driver
 });
 
 const localSchema = makeExecutableSchema({
-	typeDefs: neo4jTypeDefs,
-	resolvers: resolvers
+  typeDefs: neo4jTypeDefs,
+  resolvers: resolvers
 });
 ```
 If you already have a Person query or a createPerson mutation, <code>buildNeo4jTypeDefs</code> <b>will not overwrite</b> them. In this case, the following query type would be added to your typeDefs:
