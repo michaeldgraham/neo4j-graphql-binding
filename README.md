@@ -214,7 +214,7 @@ type Person @model {
   )
 }
 ```
-Next, use <code>buildNeo4jTypeDefs</code> in your server setup to generate those queries and mutations into your typeDefs and use the result in both your binding and your schema.
+Next, use <code>buildNeo4jTypeDefs</code> in your server setup to generate those queries and mutations into your typeDefs and use the result in both your binding and your schema. Optionally, you can set to false either of the <code>query</code> or <code>mutation</code> boolean arguments in order to prevent generation.
 ```js
 import { GraphQLServer } from 'graphql-yoga';
 import { makeExecutableSchema } from 'graphql-tools';
@@ -225,7 +225,11 @@ import { typeDefs, resolvers } from './schema.js';
 
 const driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("user", "password"));
 
-const neo4jTypeDefs = buildNeo4jTypeDefs({ typeDefs: typeDefs });
+const neo4jTypeDefs = buildNeo4jTypeDefs({ 
+  typeDefs: typeDefs,
+  query: true, // default
+  mutation: true // default
+});
 
 const neo4jGraphqlAPI = neo4jGraphQLBinding({
   typeDefs: neo4jTypeDefs,
