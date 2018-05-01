@@ -40,7 +40,6 @@ In your local GraphQL server setup, <code>neo4jGraphQLBinding</code> is used wit
 import { GraphQLServer } from 'graphql-yoga';
 import { makeExecutableSchema } from 'graphql-tools';
 import { v1 as neo4j } from 'neo4j-driver';
-
 import { neo4jGraphQLBinding, neo4jIDL } from 'neo4j-graphql-binding';
 import { typeDefs, resolvers } from './schema.js';
 
@@ -217,6 +216,15 @@ type Person @model {
 ```
 Next, use <code>buildNeo4jTypeDefs</code> in your server setup to generate those queries and mutations into your typeDefs and use the result in both your binding and your schema.
 ```js
+import { GraphQLServer } from 'graphql-yoga';
+import { makeExecutableSchema } from 'graphql-tools';
+import { v1 as neo4j } from 'neo4j-driver';
+
+import { neo4jGraphQLBinding, buildNeo4jTypeDefs } from 'neo4j-graphql-binding';
+import { typeDefs, resolvers } from './schema.js';
+
+const driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("user", "password"));
+
 const neo4jTypeDefs = buildNeo4jTypeDefs({ typeDefs: typeDefs });
 
 const neo4jGraphqlAPI = neo4jGraphQLBinding({
@@ -228,6 +236,8 @@ const localSchema = makeExecutableSchema({
   typeDefs: neo4jTypeDefs,
   resolvers: resolvers
 });
+
+...
 ```
 If you already have a Person query or a createPerson mutation, <code>buildNeo4jTypeDefs</code> <b>will not overwrite</b> them. In this case, the following query type would be added to your typeDefs:
 ```js
