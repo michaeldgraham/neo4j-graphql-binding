@@ -12,7 +12,7 @@
 - [Installation and usage](#installation-and-usage)
 	- [Request Examples](#request-examples)
 - [Auto-Generated Query Types and Mutations](#auto-generated-query-types-and-mutations)
-	- [Request Examples](#request-examples)
+	- [Request Examples](#further-request-examples)
 - [TODO](#todo)
 - [License](#license)
 
@@ -271,7 +271,7 @@ export const resolvers = {
   }
 }
 ```
-##### Request Examples
+##### Further Request Examples
 To query for Finn's first two friends, in ascending order:
 
 <code>readPersonAndFriends.graphql</code>
