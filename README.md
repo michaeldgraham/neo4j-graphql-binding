@@ -318,11 +318,12 @@ mutation createPerson($name: String) {
 }
 ```
 ### TODO
-- Progressively update what <code>buildNeo4jTypeDefs</code> generates as the <code>neo4j-graphql</code> plugin improves.
-- Generate the same schema description comments that neo4j-graphql adds to its schema (the comments show up in GraphQL Playground's schema display).
+- Write some tests.
 - Document API using JSDoc.
 - Provide more examples for complex queries and mutations in github repo.
 - Look into ways to generate the cypher for complex mutations that use @cypher directives.
+- Progressively update what <code>buildNeo4jTypeDefs</code> generates as the <code>neo4j-graphql</code> plugin improves.
+- Generate the same schema description comments that neo4j-graphql adds to its schema (the comments show up in GraphQL Playground's schema display).
 
 ### License
 The code is available under the [MIT](LICENSE) license.
