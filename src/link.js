@@ -1,5 +1,4 @@
 import { ApolloLink, Observable } from 'apollo-link';
-import { introspectSchema } from 'graphql-tools';
 import { print } from 'graphql';
 
 export const neo4jGraphqlLink = (driver) => {

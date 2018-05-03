@@ -1,6 +1,5 @@
 import { makeRemoteExecutableSchema } from 'graphql-tools';
 import { Binding  } from 'graphql-binding';
-
 import { buildBindings } from './binding.js';
 import { buildTypeDefs } from './typedefs.js';
 import { neo4jGraphqlLink } from './link.js';
