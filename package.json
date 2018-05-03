@@ -1,16 +1,12 @@
 {
   "name": "neo4j-graphql-binding",
-  "version": "1.1.0",
+  "version": "1.1.5",
   "description": "A GraphQL binding for your Neo4j GraphQL API.",
   "main": "dist/index.js",
   "author": "Michael D Graham (michaeldgrahams@gmail.com)",
   "repository": "michaeldgraham/neo4j-graphql-binding",
   "scripts": {
     "build": "babel src --out-dir dist"
-  },
-  "bugs": {
-    "url" : "https://github.com/michaeldgraham/neo4j-graphql-binding/issues",
-    "email" : "michaeldgrahams@gmail.com"
   },
   "keywords": [
     "neo4j",
