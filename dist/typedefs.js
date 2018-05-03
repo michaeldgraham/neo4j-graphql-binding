@@ -19,6 +19,33 @@ var buildTypeDefs = exports.buildTypeDefs = function buildTypeDefs(_ref) {
   parsed = possiblyBuildSchemaDefinition(parsed, typeMaps, buildQueries, buildMutations);
   parsed = possiblyBuildOperationTypes(parsed, typeMaps, buildQueries, buildMutations);
   var operationMaps = buildOperationMap(parsed);
+  parsed = buildTypes(parsed, typeMaps, operationMaps);
+  parsed = possiblyBuildLongScalar(parsed);
+  return (0, _graphql.print)(parsed);
+};
+var getOperationTypes = exports.getOperationTypes = function getOperationTypes(parsed) {
+  var arr = parsed ? parsed.definitions : [];
+  var len = arr.length;
+  var i = 0;
+  var obj = {};
+  var query = false;
+  var mutation = false;
+  for (; i < len; ++i) {
+    obj = arr[i];
+    if (isObjectType(obj)) {
+      if (obj.name.value === "Query") {
+        query = obj;
+      } else if (obj.name.value === "Mutation") {
+        mutation = obj;
+      }
+    }
+  }
+  return {
+    query: query,
+    mutation: mutation
+  };
+};
+var buildTypes = function buildTypes(parsed, typeMaps, operationMaps) {
   var types = typeMaps.types;
   var models = typeMaps.models;
   var queries = operationMaps.queries;
@@ -51,32 +78,8 @@ var buildTypeDefs = exports.buildTypeDefs = function buildTypeDefs(_ref) {
       parsed.definitions[mutations.index].fields.push(mutationType);
     }
   }
-  parsed = possiblyBuildLongScalar(parsed);
-  return (0, _graphql.print)(parsed);
+  return parsed;
 };
-var getOperationTypes = exports.getOperationTypes = function getOperationTypes(parsed) {
-  var arr = parsed ? parsed.definitions : [];
-  var len = arr.length;
-  var i = 0;
-  var obj = {};
-  var query = false;
-  var mutation = false;
-  for (; i < len; ++i) {
-    obj = arr[i];
-    if (isObjectType(obj)) {
-      if (obj.name.value === "Query") {
-        query = obj;
-      } else if (obj.name.value === "Mutation") {
-        mutation = obj;
-      }
-    }
-  }
-  return {
-    query: query,
-    mutation: mutation
-  };
-};
-
 var buildTypeMaps = function buildTypeMaps(parsed) {
   var arr = parsed ? parsed.definitions : [];
   var len = arr.length;
@@ -89,6 +92,7 @@ var buildTypeMaps = function buildTypeMaps(parsed) {
     obj = arr[i];
     if (isObjectType(obj)) {
       if (isModel(obj)) {
+        obj = reduceNestedListTypes(obj);
         models[obj.name.value] = {
           index: i,
           def: obj
@@ -204,6 +208,21 @@ var longScalarTypeExists = function longScalarTypeExists(parsed) {
   }
   return longScalarExists;
 };
+var reduceNestedListTypes = function reduceNestedListTypes(model) {
+  var fields = model.fields;
+  var len = fields.length;
+  var f = 0;
+  var field = {};
+  for (; f < len; ++f) {
+    field = fields[f];
+    if (hasRelationDirective(field)) {
+      if (field.type.kind === "ListType") {
+        fields[f] = reduceListTypes(field);
+      }
+    }
+  }
+  return model;
+};
 var buildOperationMap = function buildOperationMap(parsed) {
   var arr = parsed ? parsed.definitions : [];
   var len = arr.length;
@@ -280,8 +299,18 @@ var operationTypes = function operationTypes(_ref3) {
   }
   return operationTypes;
 };
+var reduceListTypes = function reduceListTypes(field) {
+  if (field.type.kind === "ListType" && field.type.type && field.type.type.kind === "ListType") {
+    var namedType = getNamedType(field);
+    field.type = {
+      kind: "ListType",
+      type: namedType
+    };
+  }
+  return field;
+};
 var buildModelFields = function buildModelFields(modelName, definition, models) {
-  var fields = [{
+  var modelFields = [{
     "kind": "FieldDefinition",
     "name": {
       "kind": "Name",
@@ -307,139 +336,184 @@ var buildModelFields = function buildModelFields(modelName, definition, models) 
     obj = arr[i];
     name = obj.name;
     type = obj.type;
-    fields.push({
-      "kind": "FieldDefinition",
-      "name": {
-        "kind": "Name",
-        "value": name.value
-      },
-      "arguments": buildModelFieldArguments(modelName, obj, models),
-      "type": type,
-      "directives": obj.directives
-    });
+    if (hasRelationDirective(obj)) {
+      modelFields.push({
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": name.value
+        },
+        "arguments": buildModelFieldArguments(modelName, obj, models),
+        "type": type,
+        "directives": obj.directives
+      });
+    } else {
+      modelFields.push({
+        "kind": "FieldDefinition",
+        "name": {
+          "kind": "Name",
+          "value": name.value
+        },
+        "arguments": [],
+        "type": type,
+        "directives": obj.directives
+      });
+    }
   }
-  return fields;
+  return modelFields;
+};
+var getNamedType = function getNamedType(definition) {
+  var type = definition.type;
+  while (type.kind !== "NamedType") {
+    type = type.type;
+  }return type;
 };
 var buildModelFieldArguments = function buildModelFieldArguments(modelName, definition, models) {
-  if (hasRelationDirective(definition)) {
-    // TODO clean this up
-    var relatedModel = models[definition.type.type.name.value];
-    if (relatedModel) {
-      var args = [];
-      var arr = relatedModel.def.fields;
-      var len = arr.length;
-      var i = 0;
-      var obj = {};
-      var name = {};
-      var type = {};
-      for (; i < len; ++i) {
-        obj = arr[i];
-        name = obj.name;
-        type = obj.type;
-        if (!hasRelationDirective(obj)) {
-          args.push({
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": name.value
-            },
-            "type": type,
-            "directives": []
-          });
-          args.push({
-            "kind": "InputValueDefinition",
-            "name": {
-              "kind": "Name",
-              "value": name.value + "s"
-            },
-            "type": {
-              "kind": "ListType",
-              "type": type
-            },
-            "directives": []
-          });
+  var kind = definition.type.kind;
+  var neo4jArgsForNamedType = [{
+    "kind": "InputValueDefinition",
+    "name": {
+      "kind": "Name",
+      "value": "orderBy"
+    },
+    "type": {
+      "kind": "ListType",
+      "type": {
+        "kind": "NamedType",
+        "name": {
+          "kind": "Name",
+          "value": "_" + modelName + "Ordering"
         }
       }
-      var neo4jArgs = [{
-        "kind": "InputValueDefinition",
+    },
+    "directives": []
+  }];
+  var neo4jArgsForListType = [{
+    "kind": "InputValueDefinition",
+    "name": {
+      "kind": "Name",
+      "value": "orderBy"
+    },
+    "type": {
+      "kind": "ListType",
+      "type": {
+        "kind": "NamedType",
         "name": {
           "kind": "Name",
-          "value": "orderBy"
-        },
-        "type": {
-          "kind": "ListType",
+          "value": "_" + modelName + "Ordering"
+        }
+      }
+    },
+    "directives": []
+  }, {
+    "kind": "InputValueDefinition",
+    "name": {
+      "kind": "Name",
+      "value": "_id"
+    },
+    "type": {
+      "kind": "NamedType",
+      "name": {
+        "kind": "Name",
+        "value": "Long"
+      }
+    },
+    "directives": []
+  }, {
+    "kind": "InputValueDefinition",
+    "name": {
+      "kind": "Name",
+      "value": "_ids"
+    },
+    "type": {
+      "kind": "ListType",
+      "type": {
+        "kind": "NamedType",
+        "name": {
+          "kind": "Name",
+          "value": "Long"
+        }
+      }
+    },
+    "directives": []
+  }, {
+    "kind": "InputValueDefinition",
+    "name": {
+      "kind": "Name",
+      "value": "first"
+    },
+    "type": {
+      "kind": "NamedType",
+      "name": {
+        "kind": "Name",
+        "value": "Int"
+      }
+    },
+    "directives": []
+  }, {
+    "kind": "InputValueDefinition",
+    "name": {
+      "kind": "Name",
+      "value": "offset"
+    },
+    "type": {
+      "kind": "NamedType",
+      "name": {
+        "kind": "Name",
+        "value": "Int"
+      }
+    },
+    "directives": []
+  }];
+  var relatedModelType = "";
+  if (kind === "NamedType") {
+    relatedModelType = definition.type.name.value;
+  } else if (kind === "ListType") {
+    relatedModelType = definition.type.type.name.value;
+  }
+  var relatedModel = models[relatedModelType];
+  if (relatedModel) {
+    var args = [];
+    var arr = relatedModel.def.fields;
+    var len = arr.length;
+    var i = 0;
+    var obj = {};
+    var name = {};
+    var type = {};
+    for (; i < len; ++i) {
+      obj = arr[i];
+      name = obj.name;
+      type = obj.type;
+      if (!hasRelationDirective(obj)) {
+        args.push({
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": name.value
+          },
+          "type": type,
+          "directives": []
+        });
+        args.push({
+          "kind": "InputValueDefinition",
+          "name": {
+            "kind": "Name",
+            "value": name.value + "s"
+          },
           "type": {
-            "kind": "NamedType",
-            "name": {
-              "kind": "Name",
-              "value": "_" + modelName + "Ordering"
-            }
-          }
-        },
-        "directives": []
-      }, {
-        "kind": "InputValueDefinition",
-        "name": {
-          "kind": "Name",
-          "value": "_id"
-        },
-        "type": {
-          "kind": "NamedType",
-          "name": {
-            "kind": "Name",
-            "value": "Long"
-          }
-        },
-        "directives": []
-      }, {
-        "kind": "InputValueDefinition",
-        "name": {
-          "kind": "Name",
-          "value": "_ids"
-        },
-        "type": {
-          "kind": "ListType",
-          "type": {
-            "kind": "NamedType",
-            "name": {
-              "kind": "Name",
-              "value": "Long"
-            }
-          }
-        },
-        "directives": []
-      }, {
-        "kind": "InputValueDefinition",
-        "name": {
-          "kind": "Name",
-          "value": "first"
-        },
-        "type": {
-          "kind": "NamedType",
-          "name": {
-            "kind": "Name",
-            "value": "Int"
-          }
-        },
-        "directives": []
-      }, {
-        "kind": "InputValueDefinition",
-        "name": {
-          "kind": "Name",
-          "value": "offset"
-        },
-        "type": {
-          "kind": "NamedType",
-          "name": {
-            "kind": "Name",
-            "value": "Int"
-          }
-        },
-        "directives": []
-      }];
-      args.push.apply(args, neo4jArgs);
-      return args;
+            "kind": "ListType",
+            "type": type
+          },
+          "directives": []
+        });
+      }
     }
+    if (kind === "ListType") {
+      args.push.apply(args, neo4jArgsForListType);
+    } else if (kind === "NamedType") {
+      args.push.apply(args, neo4jArgsForNamedType);
+    }
+    return args;
   }
   return [];
 };

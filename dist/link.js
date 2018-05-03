@@ -7,8 +7,6 @@ exports.neo4jGraphqlLink = undefined;
 
 var _apolloLink = require('apollo-link');
 
-var _graphqlTools = require('graphql-tools');
-
 var _graphql = require('graphql');
 
 var neo4jGraphqlLink = exports.neo4jGraphqlLink = function neo4jGraphqlLink(driver) {
