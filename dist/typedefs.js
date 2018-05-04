@@ -542,6 +542,9 @@ var buildQueryTypeArguments = function buildQueryTypeArguments(modelName, defini
     name = obj.name;
     type = obj.type;
     if (!hasRelationDirective(obj)) {
+      if (type.kind === "NonNullType") {
+        type = type.type;
+      }
       args.push({
         "kind": "InputValueDefinition",
         "name": {
