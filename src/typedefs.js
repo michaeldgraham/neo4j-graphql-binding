@@ -9,7 +9,6 @@ export const buildTypeDefs = ({ typeDefs, query, mutation }) => {
   parsed = possiblyBuildOperationTypes(parsed, typeMaps, buildQueries, buildMutations);
   const operationMaps = buildOperationMap(parsed);
   parsed = buildTypes(parsed, typeMaps, operationMaps);
-  parsed = possiblyBuildLongScalar(parsed);
   return print(parsed);
 };
 export const getOperationTypes = (parsed) => {
@@ -57,15 +56,15 @@ const buildTypes = (parsed, typeMaps, operationMaps) => {
       modelType = buildModelType(key, obj.def, models);
       parsed.definitions[obj.index] = modelType;
 
-      orderingType = buildOrderingType(key, obj.def);
+      orderingType = buildOrderingType(key, obj.def, models);
       parsed.definitions.push(orderingType);
 
-      queryType = buildQueryType(key, obj.def);
+      queryType = buildQueryType(key, obj.def, models);
       parsed.definitions[queries.index].fields.push(queryType);
 
     }
     if(mutations && mutations.fieldMap && !mutations.fieldMap[`create${key}`]) {
-      mutationType = buildMutationType(key, obj.def);
+      mutationType = buildMutationType(key, obj.def, models);
       parsed.definitions[mutations.index].fields.push(mutationType);
     }
   }
@@ -75,24 +74,24 @@ const buildTypeMaps = (parsed) => {
   const arr = parsed ? parsed.definitions : [];
   const len = arr.length;
   let i = 0;
-  let obj = {};
+  let definition = {};
   let name = "";
   const models = {};
   const types = {};
   for(; i < len; ++i) {
-    obj = arr[i];
-    if(isObjectType(obj)) {
-      if(isModel(obj)) {
-        obj = reduceNestedListTypes(obj);
-        models[obj.name.value] = {
+    definition = arr[i];
+    if(isObjectType(definition)) {
+      if(isModel(definition)) {
+        definition = reduceNestedListTypes(definition);
+        models[definition.name.value] = {
           index: i,
-          def: obj
+          def: definition
         };
       }
-      else if(obj.name.value !== "Query" && obj.name.value !== "Mutation") {
-        types[obj.name.value] = {
+      else if(definition.name.value !== "Query" && definition.name.value !== "Mutation") {
+        types[definition.name.value] = {
           index: i,
-          def: obj
+          def: definition
         };
       }
     }
@@ -159,19 +158,7 @@ const possiblyBuildSchemaDefinition = (parsed, typeMaps, queries, mutations) => 
   }
   return parsed;
 };
-const possiblyBuildLongScalar = (parsed) => {
-  if(!longScalarTypeExists(parsed)) {
-    parsed.definitions.push({
-      "kind": "ScalarTypeDefinition",
-      "name": {
-        "kind": "Name",
-        "value": "Long",
-      },
-      "directives": [],
-    });
-  }
-  return parsed;
-};
+
 const possiblyBuildOperationTypes = (parsed, typeMaps, queries, mutations) => {
   if(Object.keys(typeMaps.models).length > 0) {
     const operationTypes = getOperationTypes(parsed);
@@ -188,20 +175,7 @@ const possiblyBuildOperationTypes = (parsed, typeMaps, queries, mutations) => {
   }
   return parsed;
 };
-const longScalarTypeExists = (parsed) => {
-  const arr = parsed ? parsed.definitions : [];
-  const len = arr.length;
-  let i = 0;
-  let obj = {};
-  let longScalarExists = false;
-  for(; i < len; ++i) {
-    obj = arr[i];
-    if(obj.kind === "ScalarTypeDefinition" && obj.name.value === "Long") {
-      longScalarExists = true;
-    }
-  }
-  return longScalarExists;
-};
+
 const reduceNestedListTypes = (model) => {
   const fields = model.fields;
   const len = fields.length;
@@ -209,10 +183,8 @@ const reduceNestedListTypes = (model) => {
   let field = {};
   for(; f < len; ++f) {
     field = fields[f];
-    if(hasRelationDirective(field)) {
-      if(field.type.kind === "ListType") {
-        fields[f] = reduceListTypes(field);
-      }
+    if(field.type.kind === "ListType") {
+      fields[f] = reduceListTypes(field);
     }
   }
   return model;
@@ -311,7 +283,7 @@ const buildModelFields = (modelName, definition, models) => {
       "kind": "NamedType",
       "name": {
         "kind": "Name",
-        "value": "Long",
+        "value": "Int",
       },
     },
     "directives": [],
@@ -326,7 +298,7 @@ const buildModelFields = (modelName, definition, models) => {
     obj = arr[i];
     name = obj.name;
     type = obj.type;
-    if(hasRelationDirective(obj)) {
+    if(isModelType(obj, models)) {
       modelFields.push({
         "kind": "FieldDefinition",
         "name": {
@@ -358,8 +330,20 @@ const getNamedType = (definition) => {
   while(type.kind !== "NamedType") type = type.type;
   return type;
 }
-const buildModelFieldArguments = (modelName, definition, models) => {
-    const kind = definition.type.kind;
+
+const getFieldValueType = (definition) => {
+  const kind = definition.type.kind;
+  let relatedModelType = "";
+  if(kind === "NamedType") {
+    relatedModelType = definition.type.name.value;
+  }
+  else if(kind === "ListType") {
+    relatedModelType = definition.type.type.name.value;
+  }
+  return relatedModelType;
+}
+const buildModelFieldArguments = (modelName, field, models) => {
+    const kind = field.type.kind;
     const neo4jArgsForNamedType = [
       {
         "kind": "InputValueDefinition",
@@ -409,7 +393,7 @@ const buildModelFieldArguments = (modelName, definition, models) => {
           "kind": "NamedType",
           "name": {
             "kind": "Name",
-            "value": "Long",
+            "value": "Int",
           },
         },
         "directives": [],
@@ -426,7 +410,7 @@ const buildModelFieldArguments = (modelName, definition, models) => {
             "kind": "NamedType",
             "name": {
               "kind": "Name",
-              "value": "Long",
+              "value": "Int",
             },
           },
         },
@@ -463,13 +447,7 @@ const buildModelFieldArguments = (modelName, definition, models) => {
         "directives": [],
       }
     ];
-    let relatedModelType = "";
-    if(kind === "NamedType") {
-      relatedModelType = definition.type.name.value;
-    }
-    else if(kind === "ListType") {
-      relatedModelType = definition.type.type.name.value;
-    }
+    const relatedModelType = getFieldValueType(field);
     const relatedModel = models[relatedModelType];
     if(relatedModel) {
       let args = [];
@@ -483,7 +461,7 @@ const buildModelFieldArguments = (modelName, definition, models) => {
         obj = arr[i];
         name = obj.name;
         type = obj.type;
-        if(!hasRelationDirective(obj)) {
+        if(!isModelType(obj, models)) {
           args.push({
             "kind": "InputValueDefinition",
             "name": {
@@ -529,7 +507,7 @@ const buildModelType = (key, obj, models) => {
     "fields": buildModelFields(key, obj, models)
   }
 };
-const buildQueryTypeArguments = (modelName, definition) => {
+const buildQueryTypeArguments = (modelName, definition, models) => {
   let args = [];
   let arr = definition.fields;
   let len = arr.length;
@@ -541,7 +519,7 @@ const buildQueryTypeArguments = (modelName, definition) => {
     obj = arr[i];
     name = obj.name;
     type = obj.type;
-    if(!hasRelationDirective(obj)) {
+    if(!isModelType(obj, models)) {
       if(type.kind === "NonNullType") {
         type = type.type;
       }
@@ -597,7 +575,7 @@ const buildQueryTypeArguments = (modelName, definition) => {
         "kind": "NamedType",
         "name": {
           "kind": "Name",
-          "value": "Long",
+          "value": "Int",
         },
       },
       "directives": [],
@@ -614,7 +592,7 @@ const buildQueryTypeArguments = (modelName, definition) => {
           "kind": "NamedType",
           "name": {
             "kind": "Name",
-            "value": "Long",
+            "value": "Int",
           },
         },
       },
@@ -654,14 +632,14 @@ const buildQueryTypeArguments = (modelName, definition) => {
   args.push(...neo4jArgs);
   return args;
 };
-const buildQueryType = (key, obj) => {
+const buildQueryType = (key, obj, models) => {
   return {
     "kind": "FieldDefinition",
     "name": {
       "kind": "Name",
       "value": key,
     },
-    "arguments": buildQueryTypeArguments(key, obj),
+    "arguments": buildQueryTypeArguments(key, obj, models),
     "type": {
       "kind": "ListType",
       "type": {
@@ -675,7 +653,7 @@ const buildQueryType = (key, obj) => {
     "directives": [],
   };
 };
-const buildMutationTypeArguments = (modelName, definition) => {
+const buildMutationTypeArguments = (modelName, definition, models) => {
   let args = [];
   let arr = definition.fields;
   let len = arr.length;
@@ -687,7 +665,7 @@ const buildMutationTypeArguments = (modelName, definition) => {
     obj = arr[i];
     name = obj.name;
     type = obj.type;
-    if(!hasRelationDirective(obj)) {
+    if(!isModelType(obj, models)) {
       args.push({
         "kind": "InputValueDefinition",
         "name": {
@@ -701,14 +679,14 @@ const buildMutationTypeArguments = (modelName, definition) => {
   }
   return args;
 };
-const buildMutationType = (key, obj) => {
+const buildMutationType = (key, obj, models) => {
   return {
     "kind": "FieldDefinition",
     "name": {
       "kind": "Name",
       "value": `create${key}`,
     },
-    "arguments": buildMutationTypeArguments(key, obj),
+    "arguments": buildMutationTypeArguments(key, obj, models),
     "type": {
       "kind": "NamedType",
       "name": {
@@ -719,7 +697,7 @@ const buildMutationType = (key, obj) => {
     "directives": [],
   };
 };
-const buildEnumValues = (definition) => {
+const buildEnumValues = (definition, models) => {
   let values = [];
   let arr = definition.fields;
   let len = arr.length;
@@ -730,7 +708,7 @@ const buildEnumValues = (definition) => {
   for(; i < len; ++i) {
     obj = arr[i];
     name = obj.name;
-    if(!hasRelationDirective(obj)) {
+    if(!isModelType(obj, models)) {
       values.push({
         "kind": "EnumValueDefinition",
         "name": {
@@ -751,7 +729,7 @@ const buildEnumValues = (definition) => {
   }
   return values;
 };
-const buildOrderingType = (key, obj) => {
+const buildOrderingType = (key, obj, models) => {
   return {
     "kind": "EnumTypeDefinition",
     "name": {
@@ -759,7 +737,7 @@ const buildOrderingType = (key, obj) => {
       "value": `_${key}Ordering`,
     },
     "directives": [],
-    "values": buildEnumValues(obj)
+    "values": buildEnumValues(obj, models)
   }
 };
 const buildFieldMap = (arr) => {
@@ -801,13 +779,6 @@ const buildOperationTypeDefinition = ({ operation, name }) => {
 const isSchemaDefinition = (def) => {
   return def && def.kind === "SchemaDefinition";
 };
-const hasRelationDirective = (definition) => {
-  const directives = definition.directives;
-  let hasRelation = false;
-  directives.forEach(directive => {
-    if(directive.name.value === "relation") {
-      hasRelation = true;
-    }
-  });
-  return hasRelation;
+const isModelType = (field, models) => {
+  return models[getFieldValueType(field)];
 };
