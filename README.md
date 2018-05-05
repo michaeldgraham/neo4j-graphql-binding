@@ -3,7 +3,7 @@
 <code>neo4j-graphql-binding</code> provides a quick way to embed a [Neo4j Graph Database](https://neo4j.com/product/) GraphQL API (using the [neo4j-graphql](https://github.com/neo4j-graphql/neo4j-graphql) plugin) into your local GraphQL server.
 
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:0 orderedList:0 -->
-
+ 
 - [Overview](#overview)
 	- [neo4jGraphQLBinding](#neo4jgraphqlbinding)
 	- [neo4jIDL](#neo4jidl)
