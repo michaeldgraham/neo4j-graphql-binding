@@ -1,6 +1,6 @@
 {
   "name": "neo4j-graphql-binding",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "A GraphQL binding for your Neo4j GraphQL API.",
   "main": "dist/index.js",
   "author": "Michael D Graham (michaeldgrahams@gmail.com)",
