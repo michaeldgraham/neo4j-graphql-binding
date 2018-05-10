@@ -74,7 +74,7 @@ const neo4jGraphqlQuery = (driver, observer, operation, logRequests) => {
   if(logRequests === true) {
     console.log(`neo4jGraphqlQuery sending request\n${request} with variables\n`, operation.variables);
   }
-  session.run(`CALL graphql.query("${request}", {${transformVariables(operation.variables)}})`, operation.variables)
+  session.run(`CALL graphql.query('${request}', {${transformVariables(operation.variables)}})`, operation.variables)
   .then(result => {
     session.close();
     observer.next({
@@ -92,7 +92,7 @@ const neo4jGraphqlExecute = (driver, observer, operation, logRequests) => {
   if(logRequests === true) {
     console.log(`neo4jGraphqlQuery sending request:\n${request} with variables:\n`, operation.variables);
   }
-  session.run(`CALL graphql.execute("${request}", {${transformVariables(operation.variables)}})`, operation.variables)
+  session.run(`CALL graphql.execute('${request}', {${transformVariables(operation.variables)}})`, operation.variables)
   .then(result => {
     session.close();
     observer.next({
