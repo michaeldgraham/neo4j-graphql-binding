@@ -3,50 +3,37 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.buildBindings = undefined;
+exports.Neo4jGraphQLBinding = undefined;
 
-var _graphql = require('graphql');
+var _graphqlBinding = require('graphql-binding');
 
-var _typedefs = require('./typedefs.js');
+var _graphqlTools = require('graphql-tools');
 
-var buildBindings = exports.buildBindings = function buildBindings(_ref) {
-  var typeDefs = _ref.typeDefs,
-      binding = _ref.binding,
-      log = _ref.log;
+var _link = require('./link.js');
 
-  var parsed = (0, _graphql.parse)(typeDefs);
-  var operationTypes = (0, _typedefs.getOperationTypes)(parsed);
-  var queries = operationTypes.query;
-  var wrappers = {
-    query: {},
-    mutation: {}
-  };
-  var fieldName = "";
-  queries.fields.forEach(function (field) {
-    fieldName = field.name.value;
-    wrappers.query[fieldName] = queryBindingWrapper(fieldName, binding, log);
-  });
-  var mutations = operationTypes.mutation;
-  mutations.fields.forEach(function (field) {
-    fieldName = field.name.value;
-    wrappers.mutation[fieldName] = mutationBindingWrapper(fieldName, binding, log);
-  });
-  return wrappers;
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var queryBindingWrapper = function queryBindingWrapper(fieldName, binding, log) {
-  return function (params, ctx, info) {
-    ctx.localInfo = info;
-    ctx.requestType = "query";
-    ctx.logRequests = log;
-    return binding.query[fieldName](params, ctx, info);
-  };
-};
-var mutationBindingWrapper = function mutationBindingWrapper(fieldName, binding, log) {
-  return function (params, ctx, info) {
-    ctx.localInfo = info;
-    ctx.requestType = "mutation";
-    ctx.logRequests = log;
-    return binding.mutation[fieldName](params, ctx, info);
-  };
-};
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Neo4jGraphQLBinding = exports.Neo4jGraphQLBinding = function (_Binding) {
+  _inherits(Neo4jGraphQLBinding, _Binding);
+
+  function Neo4jGraphQLBinding(_ref) {
+    var typeDefs = _ref.typeDefs,
+        driver = _ref.driver,
+        log = _ref.log;
+
+    _classCallCheck(this, Neo4jGraphQLBinding);
+
+    return _possibleConstructorReturn(this, (Neo4jGraphQLBinding.__proto__ || Object.getPrototypeOf(Neo4jGraphQLBinding)).call(this, {
+      schema: (0, _graphqlTools.makeRemoteExecutableSchema)({
+        schema: typeDefs,
+        link: (0, _link.neo4jGraphQLLink)(typeDefs, driver, log)
+      })
+    }));
+  }
+
+  return Neo4jGraphQLBinding;
+}(_graphqlBinding.Binding);

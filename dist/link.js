@@ -3,69 +3,36 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.neo4jGraphqlLink = undefined;
+exports.neo4jGraphQLLink = undefined;
 
 var _apolloLink = require('apollo-link');
 
 var _graphql = require('graphql');
 
-var neo4jGraphqlLink = exports.neo4jGraphqlLink = function neo4jGraphqlLink(driver) {
+var neo4jGraphQLLink = exports.neo4jGraphQLLink = function neo4jGraphQLLink(typeDefs, driver, log) {
   return new _apolloLink.ApolloLink(function (operation, forward) {
     var ctx = operation.getContext().graphqlContext;
-    var localInfo = ctx.localInfo;
-    var logRequests = ctx.logRequests;
+    var operationType = operation.query.definitions[0].operation;
+    var operationName = ctx.operationName;
     return new _apolloLink.Observable(function (observer) {
-      var usedVariables = getUsedOperationVariables(operation, localInfo);
-      switchVariableDefinitions(operation, usedVariables);
-      switchArguments(operation, localInfo);
-      switch (ctx.requestType) {
+      switch (operationType) {
         case 'query':
           {
-            return neo4jGraphqlQuery(driver, observer, operation, logRequests);
+            return neo4jGraphqlQuery(operationType, operationName, driver, observer, operation, log);
           }
         case 'mutation':
           {
-            return neo4jGraphqlExecute(driver, observer, operation, logRequests);
+            return neo4jGraphqlExecute(operationType, operationName, driver, observer, operation, log);
           }
         default:
           {
-            throw Error("neo4jGraphqlLink Error: Request type " + ctx.requestType + " is not supported.");
+            throw Error("neo4jGraphqlLink Error: Request type " + operationType + " is not supported.");
           }
       }
     });
   });
 };
 
-var switchVariableDefinitions = function switchVariableDefinitions(operation, usedVariables) {
-  operation.query.definitions[0].variableDefinitions = usedVariables;
-};
-var switchArguments = function switchArguments(operation, localInfo) {
-  operation.query.definitions[0].selectionSet.selections[0].arguments = localInfo.fieldNodes[0].arguments;
-};
-var cleanVariables = function cleanVariables(operation) {
-  operation.query.definitions[0].variableDefinitions = [];
-};
-var getUsedOperationVariables = function getUsedOperationVariables(operation, localInfo) {
-  var usedVariables = [];
-  var allVariables = localInfo.operation.variableDefinitions;
-  switchArguments(operation, localInfo);
-  cleanVariables(operation);
-  var printedOnlyArguments = (0, _graphql.print)(operation.query);
-  var v = 0;
-  var len = allVariables.length;
-  var variable = {};
-  var name = "";
-  for (; v < len; ++v) {
-    variable = allVariables[v];
-    if (variable.kind === "VariableDefinition") {
-      name = variable.variable.name.value;
-      if (printedOnlyArguments.includes('$' + name)) {
-        usedVariables.push(variable);
-      }
-    }
-  }
-  return usedVariables;
-};
 var transformVariables = function transformVariables(params) {
   var transformed = [];
   var transformedParam = "";
@@ -79,13 +46,15 @@ var transformVariables = function transformVariables(params) {
   }
   return transformed.join(',\n');
 };
-var neo4jGraphqlQuery = function neo4jGraphqlQuery(driver, observer, operation, logRequests) {
+var neo4jGraphqlQuery = function neo4jGraphqlQuery(operationType, operationName, driver, observer, operation, logRequests) {
   var session = driver.session();
-  var request = (0, _graphql.print)(operation.query);
+  var queryAST = operation.query;
+  var variables = operation.variables;
+  var request = (0, _graphql.print)(queryAST);
   if (logRequests === true) {
-    console.log('neo4jGraphqlQuery sending request\n' + request + ' with variables\n', operation.variables);
+    console.log('neo4jGraphqlQuery sending request:\n' + request + ' with variables:\n', variables);
   }
-  session.run('CALL graphql.query(\'' + request + '\', {' + transformVariables(operation.variables) + '})', operation.variables).then(function (result) {
+  session.run('CALL graphql.query(\'' + request + '\', {' + transformVariables(variables) + '})', variables).then(function (result) {
     session.close();
     observer.next({
       data: result.records[0]._fields[0]
@@ -95,13 +64,15 @@ var neo4jGraphqlQuery = function neo4jGraphqlQuery(driver, observer, operation, 
     observer.error(error);
   });
 };
-var neo4jGraphqlExecute = function neo4jGraphqlExecute(driver, observer, operation, logRequests) {
+var neo4jGraphqlExecute = function neo4jGraphqlExecute(operationType, operationName, driver, observer, operation, logRequests) {
   var session = driver.session();
-  var request = (0, _graphql.print)(operation.query);
+  var queryAST = operation.query;
+  var variables = operation.variables;
+  var request = (0, _graphql.print)(queryAST);
   if (logRequests === true) {
-    console.log('neo4jGraphqlQuery sending request:\n' + request + ' with variables:\n', operation.variables);
+    console.log('neo4jGraphqlExecute sending request:\n' + request + ' with variables:\n', variables);
   }
-  session.run('CALL graphql.execute(\'' + request + '\', {' + transformVariables(operation.variables) + '})', operation.variables).then(function (result) {
+  session.run('CALL graphql.execute(\'' + request + '\', {' + transformVariables(variables) + '})', variables).then(function (result) {
     session.close();
     observer.next({
       data: result.records[0]._fields[0]
