@@ -34,6 +34,7 @@ export const getOperationTypes = (parsed) => {
     mutation: mutation
   };
 };
+
 const buildTypes = (parsed, typeMaps, operationMaps) => {
   const types = typeMaps.types;
   const models = typeMaps.models;
@@ -158,7 +159,6 @@ const possiblyBuildSchemaDefinition = (parsed, typeMaps, queries, mutations) => 
   }
   return parsed;
 };
-
 const possiblyBuildOperationTypes = (parsed, typeMaps, queries, mutations) => {
   if(Object.keys(typeMaps.models).length > 0) {
     const operationTypes = getOperationTypes(parsed);
@@ -175,7 +175,6 @@ const possiblyBuildOperationTypes = (parsed, typeMaps, queries, mutations) => {
   }
   return parsed;
 };
-
 const reduceNestedListTypes = (model) => {
   const fields = model.fields;
   const len = fields.length;
@@ -330,7 +329,6 @@ const getNamedType = (definition) => {
   while(type.kind !== "NamedType") type = type.type;
   return type;
 }
-
 const getFieldValueType = (definition) => {
   const kind = definition.type.kind;
   let relatedModelType = "";
@@ -341,6 +339,12 @@ const getFieldValueType = (definition) => {
     relatedModelType = definition.type.type.name.value;
   }
   return relatedModelType;
+}
+const possiblyRemoveNonNullType = (type) => {
+  if(type.kind === "NonNullType") {
+    type = type.type;
+  }
+  return type;
 }
 const buildModelFieldArguments = (modelName, field, models) => {
     const kind = field.type.kind;
@@ -462,6 +466,7 @@ const buildModelFieldArguments = (modelName, field, models) => {
         name = obj.name;
         type = obj.type;
         if(!isModelType(obj, models)) {
+          type = possiblyRemoveNonNullType(type);
           args.push({
             "kind": "InputValueDefinition",
             "name": {
@@ -519,10 +524,13 @@ const buildQueryTypeArguments = (modelName, definition, models) => {
     obj = arr[i];
     name = obj.name;
     type = obj.type;
+    // Only add query arguments for non-relational fields
+    // because those are otherwise handled by the generated field args
+    // added to the model type
     if(!isModelType(obj, models)) {
-      if(type.kind === "NonNullType") {
-        type = type.type;
-      }
+      // Prevent NonNullType fields from being required on generated query types
+      type = possiblyRemoveNonNullType(type);
+      // Add argument for field
       args.push({
         "kind": "InputValueDefinition",
         "name": {
@@ -532,6 +540,7 @@ const buildQueryTypeArguments = (modelName, definition, models) => {
         "type": type,
         "directives": [],
       });
+      // Add list type argument for field
       args.push({
         "kind": "InputValueDefinition",
         "name": {
@@ -546,6 +555,7 @@ const buildQueryTypeArguments = (modelName, definition, models) => {
       });
     }
   }
+  // Add field group for auto generated query types
   const neo4jArgs = [
     {
       "kind": "InputValueDefinition",

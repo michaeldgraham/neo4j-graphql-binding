@@ -1,40 +1,14 @@
-import { parse } from 'graphql';
-import { getOperationTypes } from './typedefs.js';
+import { Binding } from 'graphql-binding';
+import { makeRemoteExecutableSchema } from 'graphql-tools';
+import { neo4jGraphQLLink } from './link.js';
 
-export const buildBindings = ({ typeDefs, binding, log }) => {
-  const parsed = parse(typeDefs);
-  const operationTypes = getOperationTypes(parsed);
-  const queries = operationTypes.query;
-  let wrappers = {
-    query: {},
-    mutation: {}
+export const Neo4jGraphQLBinding = class Neo4jGraphQLBinding extends Binding {
+  constructor({ typeDefs, driver, log }) {
+    super({
+      schema: makeRemoteExecutableSchema({
+        schema: typeDefs,
+        link: neo4jGraphQLLink(typeDefs, driver, log)
+      })
+    });
   };
-  let fieldName = "";
-  queries.fields.forEach(field => {
-    fieldName = field.name.value;
-    wrappers.query[fieldName] = queryBindingWrapper(fieldName, binding, log);
-  });
-  const mutations = operationTypes.mutation;
-  mutations.fields.forEach(field => {
-    fieldName = field.name.value;
-    wrappers.mutation[fieldName] = mutationBindingWrapper(fieldName, binding, log);
-  });
-  return wrappers;
-};
-
-const queryBindingWrapper = (fieldName, binding, log) => {
-  return function(params, ctx, info) {
-    ctx.localInfo = info;
-    ctx.requestType = "query";
-    ctx.logRequests = log;
-    return binding.query[fieldName](params, ctx, info);
-  }
-};
-const mutationBindingWrapper = (fieldName, binding, log) => {
-  return function(params, ctx, info) {
-    ctx.localInfo = info;
-    ctx.requestType = "mutation";
-    ctx.logRequests = log;
-    return binding.mutation[fieldName](params, ctx, info);
-  }
 };

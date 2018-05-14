@@ -1,60 +1,27 @@
 import { ApolloLink, Observable } from 'apollo-link';
 import { print } from 'graphql';
 
-export const neo4jGraphqlLink = (driver) => {
+export const neo4jGraphQLLink = (typeDefs, driver, log) => {
   return new ApolloLink((operation, forward) => {
     const ctx = operation.getContext().graphqlContext;
-    const localInfo = ctx.localInfo;
-    const logRequests = ctx.logRequests;
+    const operationType = operation.query.definitions[0].operation;
+    const operationName = ctx.operationName;
     return new Observable(observer => {
-      const usedVariables = getUsedOperationVariables(operation, localInfo);
-      switchVariableDefinitions(operation, usedVariables);
-      switchArguments(operation, localInfo);
-      switch(ctx.requestType) {
+      switch(operationType) {
         case 'query': {
-          return neo4jGraphqlQuery(driver, observer, operation, logRequests);
+          return neo4jGraphqlQuery(operationType, operationName, driver, observer, operation, log);
         }
         case 'mutation': {
-          return neo4jGraphqlExecute(driver, observer, operation, logRequests);
+          return neo4jGraphqlExecute(operationType, operationName, driver, observer, operation, log);
         }
         default: {
-          throw Error("neo4jGraphqlLink Error: Request type "+ctx.requestType+" is not supported.");
+          throw Error("neo4jGraphqlLink Error: Request type "+operationType+" is not supported.");
         }
       }
     });
   });
 };
 
-const switchVariableDefinitions = (operation, usedVariables) => {
-  operation.query.definitions[0].variableDefinitions = usedVariables;
-};
-const switchArguments = (operation, localInfo) => {
-  operation.query.definitions[0].selectionSet.selections[0].arguments = localInfo.fieldNodes[0].arguments;
-};
-const cleanVariables = (operation) => {
-  operation.query.definitions[0].variableDefinitions = [];
-};
-const getUsedOperationVariables = (operation, localInfo) => {
-  const usedVariables = [];
-  const allVariables = localInfo.operation.variableDefinitions;
-  switchArguments(operation, localInfo);
-  cleanVariables(operation);
-  const printedOnlyArguments = print(operation.query);
-  let v = 0;
-  const len = allVariables.length;
-  let variable = {};
-  let name = "";
-  for(; v < len; ++v) {
-    variable = allVariables[v];
-    if(variable.kind === "VariableDefinition") {
-      name = variable.variable.name.value;
-      if(printedOnlyArguments.includes(`$${name}`)) {
-        usedVariables.push(variable);
-      }
-    }
-  }
-  return usedVariables;
-};
 const transformVariables = (params) => {
   let transformed = [];
   let transformedParam = "";
@@ -68,13 +35,15 @@ const transformVariables = (params) => {
   }
   return transformed.join(',\n');
 };
-const neo4jGraphqlQuery = (driver, observer, operation, logRequests) => {
+const neo4jGraphqlQuery = (operationType, operationName, driver, observer, operation, logRequests) => {
   const session = driver.session();
-  const request = print(operation.query);
+  const queryAST = operation.query;
+  const variables = operation.variables;
+  const request = print(queryAST);
   if(logRequests === true) {
-    console.log(`neo4jGraphqlQuery sending request\n${request} with variables\n`, operation.variables);
+    console.log(`neo4jGraphqlQuery sending request:\n${request} with variables:\n`, variables);
   }
-  session.run(`CALL graphql.query('${request}', {${transformVariables(operation.variables)}})`, operation.variables)
+  session.run(`CALL graphql.query('${request}', {${transformVariables(variables)}})`, variables)
   .then(result => {
     session.close();
     observer.next({
@@ -86,13 +55,15 @@ const neo4jGraphqlQuery = (driver, observer, operation, logRequests) => {
     observer.error(error);
   });
 };
-const neo4jGraphqlExecute = (driver, observer, operation, logRequests) => {
+const neo4jGraphqlExecute = (operationType, operationName, driver, observer, operation, logRequests) => {
   const session = driver.session();
-  const request = print(operation.query);
+  const queryAST = operation.query;
+  const variables = operation.variables;
+  const request = print(queryAST);
   if(logRequests === true) {
-    console.log(`neo4jGraphqlQuery sending request:\n${request} with variables:\n`, operation.variables);
+    console.log(`neo4jGraphqlExecute sending request:\n${request} with variables:\n`, variables);
   }
-  session.run(`CALL graphql.execute('${request}', {${transformVariables(operation.variables)}})`, operation.variables)
+  session.run(`CALL graphql.execute('${request}', {${transformVariables(variables)}})`, variables)
   .then(result => {
     session.close();
     observer.next({
