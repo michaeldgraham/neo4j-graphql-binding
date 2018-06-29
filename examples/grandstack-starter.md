@@ -1,2 +1,0 @@
-# GRANDstack Starter
-
