@@ -1,8 +1,9 @@
 # Table of contents
 
 * [Initial page](README.md)
-* [Introduction](untitled.md)
+* [Overview](untitled.md)
 * [Neo4j GraphQL Server](neo4j-graphql-server.md)
+* [Cypher directive](cypher-directive.md)
 * [Generated API](generated-api/README.md)
   * [Queries](generated-api/queries.md)
   * [Mutations](generated-api/mutations.md)
@@ -12,7 +13,9 @@
   * [buildNeo4jTypeDefs](api-reference/neo4jidl.md)
   * [buildNeo4jResolvers](api-reference/buildneo4jresolvers.md)
   * [neo4jGraphQLBinding](api-reference/neo4jgraphqlbinding.md)
-* [GRANDstack Starter](grandstack-starter.md)
-* [GraphQL Community Data](graphql-community-data.md)
+* [Examples](examples/README.md)
+  * [GRANDstack Starter](examples/grandstack-starter.md)
+  * [GraphQL Community Data](examples/graphql-community-data.md)
 * [Roadmap](roadmap.md)
+* [Resources](resources.md)
 
