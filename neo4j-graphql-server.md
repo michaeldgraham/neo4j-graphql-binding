@@ -8,9 +8,9 @@ description: >-
 
 ## Overview
 
-`Neo4jGraphQLServer` uses [neo4j-graphql-binding](https://www.npmjs.com/package/neo4j-graphql-binding) with [Apollo Server](https://www.apollographql.com/docs/apollo-server/v2/) to make it easier to get started using the generated schema or multiple bindings.  
-  
-The following describes the server setup process based on the below [default configuration](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/drafts/-LGHZiQkK87ykF9MSB0_/primary/neo4j-graphql-server#default-configuration):
+`Neo4jGraphQLServer` uses [neo4j-graphql-binding](https://www.npmjs.com/package/neo4j-graphql-binding) with [Apollo Server](https://www.apollographql.com/docs/apollo-server/v2/) to make it easier to get started using the generated schema or multiple bindings.
+
+The following describes the server setup process based on the [default configuration](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/drafts/-LGHZiQkK87ykF9MSB0_/primary/neo4j-graphql-server#default-configuration):
 
 1. [neo4jIDL](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/neo4jidl-1) is called to update your Neo4j-GraphQL schema. 
 2. [neo4jAssertConstraints](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/neo4jassertconstraints) is used to support a `@unique` directive by [creating constraints](https://neo4j.com/docs/developer-manual/current/get-started/cypher/labels-constraints-and-indexes/) in your Neo4j instance. It requires that you have the [APOC extension](https://neo4j-contrib.github.io/neo4j-apoc-procedures/) installed. 
@@ -65,15 +65,13 @@ This example uses nested create and connect mutations and takes advantage of the
   
 // TODO replace graph with variant
 
-![Screenshot of resulting graph in Neo4j Bloom](.gitbook/assets/integrationexample.png)
-
 Run the following mutation:
 
 ```text
  mutation {
   createTechnology(
     data: {
-      name: "Neo4j",
+      name: "Apollo",
       integration: {
         create: [
           {
@@ -81,11 +79,11 @@ Run the following mutation:
             integration: {
               create: [
                 {
-                  name: "Apollo",
+                  name: "Neo4j",
                   integration: {
                     connect: [
                       {
-                        name: "Neo4j"
+                        name: "Apollo"
                       }
                     ]
                   }

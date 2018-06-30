@@ -4,7 +4,7 @@ description: TODO
 
 # neo4jAssertConstraints
 
-In order to support the use of a `@unique` field directive, `neo4jAssertConstraints` can be used to send a Cypher query to your Neo4j instance that executes the  `apoc.schema.assert` procedure. This drops all indexes and constraints, then rebuilds them for every field that has a @unique directive, in addition to all `id` fields, on each type with a `@model` directive.
+In order to support the use of a `@unique` field directive, `neo4jAssertConstraints` can be used to send a Cypher query to your Neo4j instance that executes the  `apoc.schema.assert` procedure. For each type with a `@model` directive, constraints are created and kept for any fields on that type with a `@unique` directive, in addition to all generated `id` fields.
 
 TODO add something mentioning that you must have the APOC extension installed
 
