@@ -1,7 +1,5 @@
 # neo4jAssertConstraints
 
-### Overview
-
 In order to support the use of a `@unique` field directive, `neo4jAssertConstraints` can be used to send a Cypher query to your Neo4j instance that executes the  `apoc.schema.assert` procedure. This drops all indexes and constraints, then rebuilds them for every field that has a @unique directive, in addition to all `id` fields, on each type with a `@model` directive.
 
 ### API Reference
@@ -12,8 +10,24 @@ In order to support the use of a `@unique` field directive, `neo4jAssertConstrai
 
 ### Example
 
+The following would result in the creation of an index and constraint on the name property of Person nodes in your Neo4j instance.
+
 ```text
-import { neo4jAssertConstraints} from 'neo4j-graphql-binding';
+import { neo4jAssertConstraints } from 'neo4j-graphql-binding';
+
+const driver = neo4j.driver(
+  process.env.NEO4J_URI || "bolt://localhost:7687",
+  neo4j.auth.basic(
+    process.env.NEO4J_USER || "neo4j",
+    process.env.NEO4J_PASSWORD || "neo4j"
+  )
+);
+
+const typeDefs = `
+  type Person @model {
+    name: String @unique
+  }
+`;
 
 neo4jAssertConstraints({
   typeDefs: typeDefs,
@@ -21,4 +35,6 @@ neo4jAssertConstraints({
   log: log
 });
 ```
+
+
 

@@ -1,2 +1,0 @@
-# buildNeo4jTypeDefs
-

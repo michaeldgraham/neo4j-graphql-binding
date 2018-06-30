@@ -1,2 +1,2 @@
-# API Reference
+# Neo4j GraphQL Binding
 

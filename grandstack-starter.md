@@ -6,7 +6,7 @@ description: A modified example of the GRANDstack Starter project
 
 ![Resulting GRANDstack Starter data in Neo4j Bloom](.gitbook/assets/seedgraph%20%281%29.png)
 
-The following is a modified version of the `typeDefs` used in the GRANDstack Starter project from Neo4j \(See: [https://github.com/grand-stack/grand-stack-starter/blob/master/api/src/graphql-schema.js](https://github.com/grand-stack/grand-stack-starter/blob/master/api/src/graphql-schema.js)\). There are a few differences worth noting: 
+The following is a modified version of [the schema](https://github.com/grand-stack/grand-stack-starter/blob/master/api/src/graphql-schema.js) used in the GRANDstack Starter project . There are a few differences worth noting: 
 
 * Each type receives a `@model` directive \(currently required by neo4j-graphql-binding to support various features\).  
 * Some fields also receive `@unique` directives and the field `id: ID!` is added to all model types since it is not provided.  
@@ -45,7 +45,7 @@ type Category @model {
 }
 ```
 
-Using these `typeDefs` and generated nested `create` and `connect` mutations, we can now run a modified version of the batch mutation used to seed the database in the GRANDstack Starter project \(See: [https://github.com/grand-stack/grand-stack-starter/blob/master/api/src/seed/seed-mutations.js](https://github.com/grand-stack/grand-stack-starter/blob/master/api/src/seed/seed-mutations.js)\). 
+Using these `typeDefs` and generated nested `create` and `connect` mutations, we can now run a modified version of [the batch mutation](https://github.com/grand-stack/grand-stack-starter/blob/master/api/src/seed/seed-mutations.js) used to seed the database in the GRANDstack Starter project. 
 
 ```text
 mutation {
