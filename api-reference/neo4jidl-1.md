@@ -14,7 +14,9 @@ In order to update your Neo4j-GraphQL schema, you can use the `neo4jIDL`export, 
 
 ### Example
 
-... show an example using typeDefs, with resulting neo4j-graphql extension generated schema from an introspection, include information about setting up an introspection; make an example of a workflow for updating your schema, then viewing the neo4j-graphql generated result with introspection
+TODO show an example using typeDefs, with resulting neo4j-graphql extension generated schema from an introspection, include information about setting up an introspection; make an example of a workflow for updating your schema, then viewing the neo4j-graphql generated result with introspection
+
+TODO explain that block strings are, for now, converted down to one-liners, so you can use them to write embedded cypher more comfortably
 
 ```text
 import { neo4jIDL } from 'neo4j-graphql-binding';
@@ -25,4 +27,6 @@ neo4jIDL({
   log: log
 });
 ```
+
+### Resources
 

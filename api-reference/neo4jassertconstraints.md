@@ -6,6 +6,8 @@ description: TODO
 
 In order to support the use of a `@unique` field directive, `neo4jAssertConstraints` can be used to send a Cypher query to your Neo4j instance that executes the  `apoc.schema.assert` procedure. This drops all indexes and constraints, then rebuilds them for every field that has a @unique directive, in addition to all `id` fields, on each type with a `@model` directive.
 
+TODO add something mentioning that you must have the APOC extension installed
+
 ### API Reference
 
 * `typeDefs` \(required\): Your GraphQL type definitions in [SDL format](https://www.prisma.io/blog/graphql-sdl-schema-definition-language-6755bcb9ce51/). 
@@ -40,5 +42,7 @@ neo4jAssertConstraints({
 });
 ```
 
+### Resources
 
-
+* APOC: An Introduction to User-Defined Procedures and APOC [https://neo4j.com/blog/intro-user-defined-procedures-apoc/](https://neo4j.com/blog/intro-user-defined-procedures-apoc/) 
+* 

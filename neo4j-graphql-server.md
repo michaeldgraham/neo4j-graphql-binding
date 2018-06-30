@@ -10,10 +10,10 @@ description: >-
 
 `Neo4jGraphQLServer` uses [neo4j-graphql-binding](https://www.npmjs.com/package/neo4j-graphql-binding) with [Apollo Server](https://www.apollographql.com/docs/apollo-server/v2/) to make it easier to get started using the generated schema or multiple bindings.  
   
-The following describes the server setup process based on the default configuration:
+The following describes the server setup process based on the below [default configuration](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/drafts/-LGHZiQkK87ykF9MSB0_/primary/neo4j-graphql-server#default-configuration):
 
 1. [neo4jIDL](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/neo4jidl-1) is called to update your Neo4j-GraphQL schema. 
-2. [neo4jAssertConstraints](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/neo4jassertconstraints) is used to support a `@unique` directive by [creating constraints](https://neo4j.com/docs/developer-manual/current/get-started/cypher/labels-constraints-and-indexes/) in your Neo4j instance. 
+2. [neo4jAssertConstraints](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/neo4jassertconstraints) is used to support a `@unique` directive by [creating constraints](https://neo4j.com/docs/developer-manual/current/get-started/cypher/labels-constraints-and-indexes/) in your Neo4j instance. It requires that you have the [APOC extension](https://neo4j-contrib.github.io/neo4j-apoc-procedures/) installed. 
 3. [buildNeo4jTypeDefs](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/buildneo4jtypedefs) then augments the same typeDefs provided to your Neo4j-GraphQL schema. 
 4. [neo4jGraphQLBinding](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/drafts/-LGCUyG9i9d_inyHe6vF/primary/api-reference/neo4jgraphqlbinding) is used to create a [custom GraphQL Binding](https://oss.prisma.io/content/GraphQL-Binding/04-Creating-your-own-Binding.html) over the resulting augmented typeDefs. The binding is added into your server's [context parameter](https://www.apollographql.com/docs/apollo-server/v2/api/apollo-server.html#constructor-options-lt-ApolloServer-gt), by default at the key 'neo4j', so you can access it the way you normally would access a GraphQL Binding. 
 5. [buildNeo4jResolvers](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/buildneo4jresolvers) is used to generate resolvers for any query or mutation type that was generated or that has a [@cypher directive](https://github.com/neo4j-graphql/neo4j-graphql#directives). Each resolver uses the created binding to delegate all such queries or mutations to your Neo4j-GraphQL endpoint.  
@@ -208,7 +208,7 @@ All the same arguments as Apollo Server are supported, in addition to the follow
 * `log` \(default: `false`\): Logs results from query or mutation operations, `buildNeo4jTypeDefs`,`neo4jAssertConstraints`, and `neo4jIDL`. 
 * `bindings` An object containing... 
 
-### Full Configuration
+### Default Configuration
 
 ```text
 Neo4jGraphQLServer({

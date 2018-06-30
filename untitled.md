@@ -27,7 +27,7 @@ Progressive enhancement / getting thinner as neo4j-graphql evolves / end goal of
 
 * GRANDstack --  Build full stack graph applications with ease [https://grandstack.io/](https://grandstack.io/) 
 * Neo4j-GraphQL Extension --  A GraphQL-Endpoint extension for Neo4j [https://github.com/neo4j-graphql/neo4j-graphql](https://github.com/neo4j-graphql/neo4j-graphql) 
-* What are GraphQL Bindings? [https://www.prisma.io/blog/graphql-binding-2-0-improved-api-schema-transforms-automatic-codegen-5934cd039db1/](https://www.prisma.io/blog/graphql-binding-2-0-improved-api-schema-transforms-automatic-codegen-5934cd039db1/)
-*  Open Source Prisma Resources [https://oss.prisma.io](https://oss.prisma.io/)/ 
+* What are GraphQL Bindings? [https://www.prisma.io/blog/graphql-binding-2-0-improved-api-schema-transforms-automatic-codegen-5934cd039db1/](https://www.prisma.io/blog/graphql-binding-2-0-improved-api-schema-transforms-automatic-codegen-5934cd039db1/) 
+* Open Source Prisma Resources [https://oss.prisma.io](https://oss.prisma.io/)/ 
 * Apollo Link -- Composable networking for GraphQL [https://www.apollographql.com/docs/link/](https://www.apollographql.com/docs/link/) 
 
