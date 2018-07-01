@@ -186,6 +186,8 @@ query {
 
 ...Example of every use case of @cypher directive + generated query, create mutation, custom update and delete mutation in cypher directive, mention above that ...
 
+note that resolvers do not overwrite and show example of writing async / await resolver or preprocessing or post processing of data
+
 ## Using Multiple Bindings
 
 ## API Reference
