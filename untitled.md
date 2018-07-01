@@ -1,14 +1,14 @@
 # Introduction
 
-It seems that [GraphQL](https://graphql.org/) users could benefit from using __[graph databases](https://neo4j.com/developer/graph-database/) and graph database users could benefit from using GraphQL. Thankfully, much has already been done to support this direction.  
-  
-The goal of this project is to explore that direction further by attempting to integrate methods and resources developed by [Neo4j](https://neo4j.com/), [Apollo](https://www.apollographql.com/), and [Prisma](https://www.prisma.io/).
+It seems that [GraphQL](https://graphql.org/) users could benefit from using __[graph databases](https://neo4j.com/developer/graph-database/) and graph database users could benefit from using GraphQL. Thankfully, much has already been done to support this direction.
 
 As part of the [GRANDstack](https://grandstack.io/) project, Neo4j has built a GraphQL-Endpoint extension named [Neo4j-GraphQL](https://github.com/neo4j-graphql/neo4j-graphql), which provides an [auto-generated API](https://github.com/neo4j-graphql/neo4j-graphql#auto-generated-query-types) and custom database procedures for updating the schema and running operations. They have also developed the [neo4j-graphql-js](https://www.npmjs.com/package/neo4j-graphql-js) package, which converts GraphQL requests directly to Cypher requests and so does not need to depend upon the use of the Neo4j-GraphQL extension.
 
 Apollo...  
   
 [Prisma](https://www.prisma.io/) has developed a variety of [GraphQL resources](https://oss.prisma.io). Their [graphql-binding](https://www.npmjs.com/package/graphql-binding) package makes it easier to use  [schema delegation](https://dev-blog.apollodata.com/graphql-schema-delegation-9d832648c543) to pass requests made to your local GraphQL server over to a remote GraphQL API. Many features of this package have been drawn from the [Prisma API](https://www.prisma.io/docs/reference/prisma-api/overview-ohm2ouceuj), most notably their support for [nested mutations](https://www.prisma.io/docs/reference/prisma-api/mutations-ol0yuoz6go#nested-mutations).
+
+The goal of this project is to use [Neo4j](https://neo4j.com/) graph databases and [Apollo GraphQL](https://www.apollographql.com/) server and networking resources to develop a GraphQL API that further explores that direction. 
 
 TODO BEGIN  
   
