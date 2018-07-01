@@ -1,7 +1,6 @@
 # Table of contents
 
 * [Introduction](README.md)
-* [Introduction](untitled.md)
 * [Neo4j GraphQL Server](neo4j-graphql-server.md)
 * [Neo4j GraphQL Binding](api-reference/README.md)
   * [neo4jGraphQLBinding](api-reference/neo4jgraphqlbinding.md)
