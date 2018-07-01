@@ -16,7 +16,7 @@ In order to support the use of a `@unique` field directive, `neo4jAssertConstrai
 
 ### Example
 
-The following would result in the creation of an index and constraint on the `name` property of `Person` nodes in your Neo4j instance.
+The following would result in the creation of an index and constraint on the `name` property of `Technology` nodes in your Neo4j instance.
 
 ```text
 import { neo4jAssertConstraints } from 'neo4j-graphql-binding';
@@ -29,9 +29,9 @@ const driver = neo4j.driver(
   )
 );
 
-const typeDefs = `
-  type Person @model {
-    name: String @unique
+const typeDefs = /* GraphQL */`
+  type Technology @model {
+    name: String! @unique
   }
 `;
 
