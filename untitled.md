@@ -1,19 +1,21 @@
 # Introduction
 
-It seems that GraphQL users could benefit from using __graph databases and graph database users could benefit from using GraphQL. Thankfully, much has already been done to support this direction.  
+It seems that [GraphQL](https://graphql.org/) users could benefit from using __graph databases and graph database users could benefit from using GraphQL. Thankfully, much has already been done to support this direction.  
   
-This project is an attempt to explore and integrate using [Apollo](https://www.apollographql.com/) resources for ... [Neo4j](https://neo4j.com/) ... Prisma... . 
+The goal of this project is to explore that direction further by attempting to integrate methods and resources developed by [Neo4j](https://neo4j.com/), [Apollo](https://www.apollographql.com/), and [Prisma](https://www.prisma.io/).
 
-As part of the [GRANDstack](https://grandstack.io/) project, Neo4j has built an extension named [Neo4j-GraphQL](https://github.com/neo4j-graphql/neo4j-graphql), which exposes auto-generated [query](https://github.com/neo4j-graphql/neo4j-graphql#auto-generated-query-types) and [mutation](https://www.prisma.io/docs/reference/prisma-api/mutations-ol0yuoz6go#nested-mutations) types and custom procedures for updating the schema and running operations. They have also developed the [neo4j-graphql-js](https://www.npmjs.com/package/neo4j-graphql-js) package, which converts GraphQL requests directly to Cypher requests and so does not need to depend upon the use of the Neo4j-GraphQL extension.  
+As part of the [GRANDstack](https://grandstack.io/) project, Neo4j has built a GraphQL-Endpoint extension named [Neo4j-GraphQL](https://github.com/neo4j-graphql/neo4j-graphql), which provides an [auto-generated API](https://github.com/neo4j-graphql/neo4j-graphql#auto-generated-query-types) and custom database procedures for updating the schema and running operations. They have also developed the [neo4j-graphql-js](https://www.npmjs.com/package/neo4j-graphql-js) package, which converts GraphQL requests directly to Cypher requests and so does not need to depend upon the use of the Neo4j-GraphQL extension.
+
+Apollo...  
   
-[Prisma](https://www.prisma.io/) has developed a variety of [GraphQL resources](https://oss.prisma.io). Their [graphql-binding](https://www.npmjs.com/package/graphql-binding) package makes it easier to use  [schema delegation](https://dev-blog.apollodata.com/graphql-schema-delegation-9d832648c543) to pass requests made to your local GraphQL server over to a remote GraphQL API. Many features of this package have been drawn from the [Prisma API](https://www.prisma.io/docs/reference/prisma-api/overview-ohm2ouceuj), most notably their support for [nested mutations](https://www.prisma.io/docs/reference/prisma-api/mutations-ol0yuoz6go#nested-mutations).  
-
+[Prisma](https://www.prisma.io/) has developed a variety of [GraphQL resources](https://oss.prisma.io). Their [graphql-binding](https://www.npmjs.com/package/graphql-binding) package makes it easier to use  [schema delegation](https://dev-blog.apollodata.com/graphql-schema-delegation-9d832648c543) to pass requests made to your local GraphQL server over to a remote GraphQL API. Many features of this package have been drawn from the [Prisma API](https://www.prisma.io/docs/reference/prisma-api/overview-ohm2ouceuj), most notably their support for [nested mutations](https://www.prisma.io/docs/reference/prisma-api/mutations-ol0yuoz6go#nested-mutations).
 
 TODO BEGIN  
   
-Goal is to draw from neo4j-graphql and prisma to...   
+Goal is to built an api that first draws from neo4j-graphql and prisma to...   
+a hope is that as the Neo4j-GraphQL plugin evolves, this package will become thinner,   
+secondly, once that is developed, i want to explore some of what may be possibly with a GraphQL integration with a Neo4j graph database, such as taking advantage of properties on relations.   
   
-Apollo Link... Server...   
   
 Explain that for query types I just pass them off to neo4j-graphql, and for mutations, I provide custom support, for now, converting the GraphQL request into a complex Cypher statement \(such as with nested mutations, etc.\)
 
