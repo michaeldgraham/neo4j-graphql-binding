@@ -18,10 +18,8 @@ The following describes the server setup process based on the [default configura
 2. [neo4jAssertConstraints](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/neo4jassertconstraints) is used to support a `@unique` directive by [creating constraints](https://neo4j.com/docs/developer-manual/current/get-started/cypher/labels-constraints-and-indexes/) in your Neo4j instance. It requires that you have the [APOC extension](https://neo4j-contrib.github.io/neo4j-apoc-procedures/) installed. 
 3. [buildNeo4jTypeDefs](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/buildneo4jtypedefs) then augments the same typeDefs provided to your Neo4j-GraphQL schema. 
 4. [neo4jGraphQLBinding](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/drafts/-LGCUyG9i9d_inyHe6vF/primary/api-reference/neo4jgraphqlbinding) is used to create a [custom GraphQL Binding](https://oss.prisma.io/content/GraphQL-Binding/04-Creating-your-own-Binding.html) over the resulting augmented typeDefs. The binding is added into your server's [context parameter](https://www.apollographql.com/docs/apollo-server/v2/api/apollo-server.html#constructor-options-lt-ApolloServer-gt) \(default key: 'neo4j' so you can access it the way you normally would access a GraphQL Binding. 
-5. [buildNeo4jResolvers](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/buildneo4jresolvers) then generates a resolver for any query or mutation type that was generated or that has a [@cypher directive](https://github.com/neo4j-graphql/neo4j-graphql#directives). Each resolver uses a created binding to delegate all such queries or mutations to your Neo4j-GraphQL endpoint. Generated resolvers to _not overwrite_ any you provide.  
+5. [buildNeo4jResolvers](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/buildneo4jresolvers) then generates a resolver for any query or mutation type that was generated or that has a [@cypher directive](https://github.com/neo4j-graphql/neo4j-graphql#directives). Each resolver uses a created binding to delegate all such queries or mutations to your Neo4j-GraphQL endpoint. Generated resolvers _do_ _not overwrite_ any you provide.  
 6. Finally, steps 1-5 are processed for any additional binding configurations provided in `bindings` and the resulting `typeDefs` and `resolvers` are merged and provided to Apollo Server.
-
-In order to support creating multiple bindings, this entire process is repeated for every valid configuration object passed into the `bindings` argument of `Neo4jGraphQLServer`. See the below example to check out using multiple bindings.
 
 ## Quick Start
 
@@ -113,7 +111,7 @@ This example uses nested create and connect mutations and takes advantage of the
 }
 ```
 
-`Result`
+`Response`
 
 ```text
 {
@@ -159,7 +157,7 @@ query {
 }
 ```
 
-`Result`
+`Response`
 
 ```text
 {
@@ -188,7 +186,11 @@ query {
 
 note that resolvers do not overwrite and show example of writing async / await resolver or preprocessing or post processing of data
 
+end with prism graph example
+
 ## Using Multiple Bindings
+
+See the section on using the [GraphQL Community Graph](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/drafts/-LGMw3hveOAgWUI_QtyJ/primary/graphql-community-data) for an example of configuring and using multiple bindings. 
 
 ## API Reference
 
@@ -209,7 +211,7 @@ All the same arguments as Apollo Server are supported, in addition to the follow
 * `indexConfig` Configures the management of generated `id` fields.
   * `use` \(default/only: `'cuid'`\) Configures what method to use when generating id field values.  
 * `localBindingKey` \(default: `'neo4j'`\): The key used when storing the created binding into the server's context object. 
-* `log` \(default: `false`\): Logs results from query or mutation operations, `buildNeo4jTypeDefs`,`neo4jAssertConstraints`, and `neo4jIDL`. 
+* `log` \(default: `false`\): Logs the result of any delegated query or mutation operation, `buildNeo4jTypeDefs`,`neo4jAssertConstraints`, and `neo4jIDL`. 
 * `bindings` An object containing... 
 
 ```text

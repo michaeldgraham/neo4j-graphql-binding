@@ -1,14 +1,16 @@
 ---
-description: A few examples of using Neo4j's GraphQL Community Data server
+description: A few examples of using the GraphQL Community Graph by Neo4j.
 ---
 
-# GraphQL Community Data
+# GraphQL Community Graph
 
-TODO
+### With Multiple Bindings
 
-show example using both Neo4jGraphQLServer \(to R/W local db server\) and neo4jgraphqljs \(to read from community db server\), for each example schema
+If...
 
-notes about resolver names
+### Using neo4j-graphql-js
 
-show twitter neo4j-graphql endpoint example
+If...
+
+
 

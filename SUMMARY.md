@@ -9,7 +9,7 @@
   * [buildNeo4jTypeDefs](api-reference/buildneo4jtypedefs.md)
   * [buildNeo4jResolvers](api-reference/buildneo4jresolvers.md)
 * [GRANDstack Starter](grandstack-starter.md)
-* [GraphQL Community Data](graphql-community-data.md)
+* [GraphQL Community Graph](graphql-community-data.md)
 * [Roadmap](roadmap.md)
 * [Resources](resources.md)
 

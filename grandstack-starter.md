@@ -9,8 +9,8 @@ description: A modified example of the GRANDstack Starter project
 The following is a modified version of [the schema](https://github.com/grand-stack/grand-stack-starter/blob/master/api/src/graphql-schema.js) used in the GRANDstack Starter project . There are a few differences worth noting: 
 
 * Each type receives a `@model` directive \(currently required by neo4j-graphql-binding to support various features\).  
-* Some fields also receive `@unique` directives and the field `id: ID!` is added to all model types since it is not provided.  
-* The Cypher statement within the `@cypher` directive for the computed `avgStars` field on the User type is written within a block string to make it easier to work with. Block strings for `@cypher` directive statements are supported if you use `neo4jIDL` to update your Neo4j-GraphQL schema.
+* Some fields also receive a `@unique` directive and for every model type without an `id: ID! @unique` field, one is generated and added. 
+* The Cypher statement within the `@cypher` directive for the computed `avgStars` field on the User type is written within a block string to make it easier to work with. Until they become standard, block strings for `@cypher` directive statements are supported if you use `neo4jIDL` to update your Neo4j-GraphQL schema.
 
 ```text
 type User @model {
