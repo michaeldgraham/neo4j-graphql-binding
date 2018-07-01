@@ -63,7 +63,7 @@ If you navigate to [http://localhost:4000/](http://localhost:4000/), you should 
 
 ### Nested Mutation
 
-This example uses nested create and connect mutations and takes advantage of the @unique directive to create the above graph with three nodes.  
+This example uses nested create and connect mutations and takes advantage of the @unique directive to create the above graph with three Technology nodes.  
   
 `Request`
 
