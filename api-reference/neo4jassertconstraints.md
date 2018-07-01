@@ -1,5 +1,7 @@
 ---
-description: Maintains unique property constraints.
+description: >-
+  Uses the APOC extension to keep Neo4j property constraints in sync with
+  @unique fields.
 ---
 
 # neo4jAssertConstraints
