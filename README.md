@@ -2,7 +2,7 @@
 
 It seems that [GraphQL](https://graphql.org/) users could benefit from using __[graph databases](https://neo4j.com/developer/graph-database/) and graph database users could benefit from using GraphQL. Thankfully, much has already been done to support this direction.
 
-As part of the [GRANDstack](https://grandstack.io/) project, [Neo4j](https://neo4j.com/) has built a GraphQL-Endpoint extension named [Neo4j-GraphQL](https://github.com/neo4j-graphql/neo4j-graphql), which provides an [auto-generated API](https://github.com/neo4j-graphql/neo4j-graphql#auto-generated-query-types) and custom database procedures for updating the schema and running operations. They have also developed the [neo4j-graphql-js](https://www.npmjs.com/package/neo4j-graphql-js) package, which converts GraphQL requests directly to Cypher requests and so does not need to depend upon the use of the Neo4j-GraphQL extension.
+As part of the [GRANDstack](https://grandstack.io/) project, [Neo4j](https://neo4j.com/) has built a GraphQL-Endpoint extension named [Neo4j-GraphQL](https://github.com/neo4j-graphql/neo4j-graphql), which provides an [auto-generated API](https://github.com/neo4j-graphql/neo4j-graphql#auto-generated-query-types) and custom database procedures for updating the schema and running operations. They have also developed the [neo4j-graphql-js](https://www.npmjs.com/package/neo4j-graphql-js) package, which converts GraphQL requests directly to Cypher requests, which is especially useful in situations where the Neo4j-GraphQL extension is not available.
 
 [Apollo GraphQL](https://www.apollographql.com/) ...  
   
