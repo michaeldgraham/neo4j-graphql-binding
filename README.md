@@ -4,9 +4,9 @@ It seems that [GraphQL](https://graphql.org/) users could benefit from using __[
 
 As part of the [GRANDstack](https://grandstack.io/) project, [Neo4j](https://neo4j.com/) has built a GraphQL-Endpoint extension named [Neo4j-GraphQL](https://github.com/neo4j-graphql/neo4j-graphql), which provides an [auto-generated API](https://github.com/neo4j-graphql/neo4j-graphql#auto-generated-query-types) and custom database procedures for updating the schema and running operations. They have also developed the [neo4j-graphql-js](https://www.npmjs.com/package/neo4j-graphql-js) package, which converts GraphQL requests directly to Cypher requests, which is especially useful in situations where the Neo4j-GraphQL extension is not available.
 
-[Apollo GraphQL](https://www.apollographql.com/) ...  
+The [Apollo Platform](https://www.apollographql.com/) provides a variety of technologies for working GraphQL much easier, including setting up servers with [Apollo Server 2.0](https://www.apollographql.com/docs/apollo-server/v2/) and using [Apollo Link](https://www.apollographql.com/docs/link/) for composable networking.  
   
-[Prisma](https://www.prisma.io/) has developed a variety of [GraphQL resources](https://oss.prisma.io). Their [graphql-binding](https://www.npmjs.com/package/graphql-binding) package makes it easier to use  [schema delegation](https://dev-blog.apollodata.com/graphql-schema-delegation-9d832648c543) to pass requests made to your local GraphQL server over to a remote GraphQL API. They have also developed the [Prisma API](https://www.prisma.io/docs/reference/prisma-api/overview-ohm2ouceuj), which supports [nested mutations](https://www.prisma.io/docs/reference/prisma-api/mutations-ol0yuoz6go#nested-mutations).
+[Prisma](https://www.prisma.io/) has developed a variety of [GraphQL resources](https://oss.prisma.io). Their [graphql-binding](https://www.npmjs.com/package/graphql-binding) package makes it easier to use  [schema delegation](https://dev-blog.apollodata.com/graphql-schema-delegation-9d832648c543). They have also developed the [Prisma API](https://www.prisma.io/docs/reference/prisma-api/overview-ohm2ouceuj), which supports [nested mutations](https://www.prisma.io/docs/reference/prisma-api/mutations-ol0yuoz6go#nested-mutations).
 
 ### Goal
 
