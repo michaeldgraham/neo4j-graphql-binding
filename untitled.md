@@ -1,6 +1,6 @@
 # Introduction
 
-It seems that [GraphQL](https://graphql.org/) users could benefit from using __graph databases and graph database users could benefit from using GraphQL. Thankfully, much has already been done to support this direction.  
+It seems that [GraphQL](https://graphql.org/) users could benefit from using __[graph databases](https://neo4j.com/developer/graph-database/) and graph database users could benefit from using GraphQL. Thankfully, much has already been done to support this direction.  
   
 The goal of this project is to explore that direction further by attempting to integrate methods and resources developed by [Neo4j](https://neo4j.com/), [Apollo](https://www.apollographql.com/), and [Prisma](https://www.prisma.io/).
 
