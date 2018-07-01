@@ -21,7 +21,7 @@ The following describes the server setup process based on the [default configura
 5. [buildNeo4jResolvers](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/buildneo4jresolvers) is used to generate resolvers for any query or mutation type that was generated or that has a [@cypher directive](https://github.com/neo4j-graphql/neo4j-graphql#directives). Each resolver uses the created binding to delegate all such queries or mutations to your Neo4j-GraphQL endpoint.  
 6. Finally, The augmented `typeDefs` and `resolvers` are used in setting up Apollo Server.
 
-In order to support creating [multiple bindings](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/neo4j-graphql-server#using-multiple-bindings), this entire process is repeated for every valid configuration object passed into the `bindings` argument of `Neo4jGraphQLServer`.
+In order to support creating multiple bindings, this entire process is repeated for every valid configuration object passed into the `bindings` argument of `Neo4jGraphQLServer`. See the below example to check out using multiple bindings.
 
 ## Quick Start
 
@@ -186,6 +186,8 @@ query {
 
 ...Example of every use case of @cypher directive + generated query, create mutation, custom update and delete mutation in cypher directive, mention above that ...
 
+## Using Multiple Bindings
+
 ## API Reference
 
 All the same arguments as Apollo Server are supported, in addition to the following:
@@ -207,8 +209,6 @@ All the same arguments as Apollo Server are supported, in addition to the follow
 * `localBindingKey` \(default: `'neo4j'`\): The key used when storing the created binding into the server's context object. 
 * `log` \(default: `false`\): Logs results from query or mutation operations, `buildNeo4jTypeDefs`,`neo4jAssertConstraints`, and `neo4jIDL`. 
 * `bindings` An object containing... 
-
-### Default Configuration
 
 ```text
 Neo4jGraphQLServer({
@@ -233,8 +233,6 @@ Neo4jGraphQLServer({
   localBindingKey: 'neo4j'
 });
 ```
-
-### Using Multiple Bindings
 
 Explain why / how  
 Introduce / Explain the neo4j graphql community data server, link to things
