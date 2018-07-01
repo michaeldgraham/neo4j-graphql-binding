@@ -6,7 +6,7 @@ As part of the [GRANDstack](https://grandstack.io/) project, [Neo4j](https://neo
 
 The [Apollo Platform](https://www.apollographql.com/) provides a variety of technologies that support working with GraphQL, including [Apollo Server 2.0](https://www.apollographql.com/docs/apollo-server/v2/) and [Apollo Link](https://www.apollographql.com/docs/link/) for composable networking.  
   
-[Prisma](https://www.prisma.io/) has developed a variety of [GraphQL resources](https://oss.prisma.io). Their [graphql-binding](https://www.npmjs.com/package/graphql-binding) package makes it easier to use  [schema delegation](https://dev-blog.apollodata.com/graphql-schema-delegation-9d832648c543). They have also developed the [Prisma API](https://www.prisma.io/docs/reference/prisma-api/overview-ohm2ouceuj), which supports [nested mutations](https://www.prisma.io/docs/reference/prisma-api/mutations-ol0yuoz6go#nested-mutations).
+[Prisma](https://www.prisma.io/) has developed a collection of [GraphQL resources](https://oss.prisma.io). Their [graphql-binding](https://www.npmjs.com/package/graphql-binding) package makes it easier to use [schema delegation](https://dev-blog.apollodata.com/graphql-schema-delegation-9d832648c543). They have also built the [Prisma API](https://www.prisma.io/docs/reference/prisma-api/overview-ohm2ouceuj), which supports [nested mutations](https://www.prisma.io/docs/reference/prisma-api/mutations-ol0yuoz6go#nested-mutations).
 
 ### Goal
 
