@@ -6,7 +6,7 @@ description: >-
 
 # Neo4j GraphQL Server
 
-## Overview
+## Strategy
 
 `Neo4jGraphQLServer` uses [neo4j-graphql-binding](https://www.npmjs.com/package/neo4j-graphql-binding) with [Apollo Server](https://www.apollographql.com/docs/apollo-server/v2/) to make it easier to get started using the generated schema or multiple bindings.
 
@@ -17,11 +17,11 @@ The following describes the server setup process based on the [default configura
 1. [neo4jIDL](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/neo4jidl-1) is called to update your Neo4j-GraphQL schema. 
 2. [neo4jAssertConstraints](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/neo4jassertconstraints) is used to support a `@unique` directive by [creating constraints](https://neo4j.com/docs/developer-manual/current/get-started/cypher/labels-constraints-and-indexes/) in your Neo4j instance. It requires that you have the [APOC extension](https://neo4j-contrib.github.io/neo4j-apoc-procedures/) installed. 
 3. [buildNeo4jTypeDefs](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/buildneo4jtypedefs) then augments the same typeDefs provided to your Neo4j-GraphQL schema. 
-4. [neo4jGraphQLBinding](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/drafts/-LGCUyG9i9d_inyHe6vF/primary/api-reference/neo4jgraphqlbinding) is used to create a [custom GraphQL Binding](https://oss.prisma.io/content/GraphQL-Binding/04-Creating-your-own-Binding.html) over the resulting augmented typeDefs. The binding is added into your server's [context parameter](https://www.apollographql.com/docs/apollo-server/v2/api/apollo-server.html#constructor-options-lt-ApolloServer-gt), by default at the key 'neo4j', so you can access it the way you normally would access a GraphQL Binding. 
+4. [neo4jGraphQLBinding](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/drafts/-LGCUyG9i9d_inyHe6vF/primary/api-reference/neo4jgraphqlbinding) is used to create a [custom GraphQL Binding](https://oss.prisma.io/content/GraphQL-Binding/04-Creating-your-own-Binding.html) over the resulting augmented typeDefs. The binding is added into your server's [context parameter](https://www.apollographql.com/docs/apollo-server/v2/api/apollo-server.html#constructor-options-lt-ApolloServer-gt) \(default key: 'neo4j' so you can access it the way you normally would access a GraphQL Binding. 
 5. [buildNeo4jResolvers](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/api-reference/buildneo4jresolvers) is used to generate resolvers for any query or mutation type that was generated or that has a [@cypher directive](https://github.com/neo4j-graphql/neo4j-graphql#directives). Each resolver uses the created binding to delegate all such queries or mutations to your Neo4j-GraphQL endpoint.  
 6. Finally, The augmented `typeDefs` and `resolvers` are used in setting up Apollo Server.
 
-In order to support creating multiple bindings, this entire process is repeated for every valid configuration object passed into the `bindings` argument of `Neo4jGraphQLServer`. See the [example](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/neo4j-graphql-server#using-multiple-bindings) below for using multiple bindings.
+In order to support creating [multiple bindings](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGCUyG9i9d_inyHe6vF/neo4j-graphql-server#using-multiple-bindings), this entire process is repeated for every valid configuration object passed into the `bindings` argument of `Neo4jGraphQLServer`.
 
 ## Quick Start
 
@@ -63,11 +63,9 @@ If you navigate to [http://localhost:4000/](http://localhost:4000/), you should 
 
 ### Nested Mutation
 
-This example uses nested create and connect mutations and takes advantage of the @unique directive to create the following graph:  
+This example uses nested create and connect mutations and takes advantage of the @unique directive to create the above graph with three nodes.  
   
-// TODO replace graph with variant
-
-Run the following mutation:
+`Request`
 
 ```text
  mutation {
@@ -115,7 +113,7 @@ Run the following mutation:
 }
 ```
 
-Result:
+`Result`
 
 ```text
 {
@@ -148,7 +146,9 @@ Result:
 
 ### Query
 
-Now you can run the following query: 
+Now we can run the following query:  
+  
+`Request`
 
 ```text
 query {
@@ -159,7 +159,7 @@ query {
 }
 ```
 
-Result:
+`Result`
 
 ```text
 {
@@ -182,7 +182,7 @@ Result:
 }
 ```
 
-### Full Example
+## Full Example
 
 ...Example of every use case of @cypher directive + generated query, create mutation, custom update and delete mutation in cypher directive, mention above that ...
 
