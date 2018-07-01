@@ -11,5 +11,4 @@
 * [GRANDstack Starter](grandstack-starter.md)
 * [GraphQL Community Graph](graphql-community-data.md)
 * [Roadmap](roadmap.md)
-* [Resources](resources.md)
 
