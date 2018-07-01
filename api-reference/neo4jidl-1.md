@@ -1,5 +1,5 @@
 ---
-description: TODO
+description: Updates your Neo4j-GraphQL schema by calling the graphql.idl procedure.
 ---
 
 # neo4jIDL

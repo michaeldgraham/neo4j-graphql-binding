@@ -1,12 +1,10 @@
 ---
-description: TODO
+description: Maintains unique property constraints.
 ---
 
 # neo4jAssertConstraints
 
 In order to support the use of a `@unique` field directive, `neo4jAssertConstraints` can be used to send a Cypher query to your Neo4j instance that executes the  `apoc.schema.assert` procedure. For each type with a `@model` directive, constraints are created and kept for any fields on that type with a `@unique` directive, in addition to all generated `id` fields.
-
-TODO add something mentioning that you must have the APOC extension installed
 
 ### API Reference
 
@@ -16,7 +14,7 @@ TODO add something mentioning that you must have the APOC extension installed
 
 ### Example
 
-The following would result in the creation of an index and constraint on the name property of Person nodes in your Neo4j instance.
+The following would result in the creation of an index and constraint on the `name` property of `Person` nodes in your Neo4j instance.
 
 ```text
 import { neo4jAssertConstraints } from 'neo4j-graphql-binding';
@@ -45,4 +43,5 @@ neo4jAssertConstraints({
 ### Resources
 
 * APOC: An Introduction to User-Defined Procedures and APOC [https://neo4j.com/blog/intro-user-defined-procedures-apoc/](https://neo4j.com/blog/intro-user-defined-procedures-apoc/) 
-* 
+* Neo4j Constraints [https://neo4j.com/docs/developer-manual/current/get-started/cypher/labels-constraints-and-indexes/](https://neo4j.com/docs/developer-manual/current/get-started/cypher/labels-constraints-and-indexes/)
+

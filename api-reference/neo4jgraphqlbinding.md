@@ -1,5 +1,7 @@
 ---
-description: TODO 'mirrors'
+description: >-
+  Creates a GraphQL Binding for a Neo4j instance that uses the Neo4j-GraphQL
+  extension.
 ---
 
 # neo4jGraphQLBinding
