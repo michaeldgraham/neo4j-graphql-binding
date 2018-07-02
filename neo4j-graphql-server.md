@@ -10,7 +10,7 @@ description: >-
 
 `Neo4jGraphQLServer` uses the [neo4j-graphql-binding](https://www.npmjs.com/package/neo4j-graphql-binding) package with [Apollo Server](https://www.apollographql.com/docs/apollo-server/v2/) to make it easier to get started using the generated schema or multiple bindings.
 
-![Create this graph in the Quick Start below! \(image from Neo4j Bloom\)](.gitbook/assets/integrationgraph%20%282%29.png)
+![Create this graph in the Quick Start below! \(image from Neo4j Bloom\)](.gitbook/assets/integrationgraph.png)
 
 The following describes the server setup process based on the [default configuration](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/drafts/-LGHZiQkK87ykF9MSB0_/primary/neo4j-graphql-server#default-configuration):
 
@@ -187,6 +187,84 @@ query {
 note that resolvers do not overwrite and show example of writing async / await resolver or preprocessing or post processing of data
 
 end with prism graph example
+
+### Complex Nested Mutation
+
+This mutation creates a [Prism Graph](http://mathworld.wolfram.com/PrismGraph.html)! 🌈
+
+`Request`
+
+```text
+ mutation { 
+	createTechnology(
+    data: {
+      name: "A",
+      integration: {
+        create: [
+          {
+            name: "B",
+            integration: {
+              connect: {
+                name: "D"
+              }
+            }
+          },
+          {
+            name: "C",
+            integration: {
+              create: [
+                {
+                  name: "E",
+                  integration: {
+                    connect: [
+                      {
+                        name: "F"
+                      },
+                      {
+                        name: "B"
+                      }
+                    ]
+                  }
+                },
+                {
+                  name: "F",
+                  integration: {
+                    connect: {
+                      name: "D"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            name: "D"
+          }
+        ]
+      }
+	}) {
+    id		
+    name
+    integration {
+      id
+      name
+      integration {
+        id
+        name
+        integration {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+
+```
+
+`Graph`
+
+![Prism Graph](.gitbook/assets/prismgraph.png)
 
 ## Using Multiple Bindings
 

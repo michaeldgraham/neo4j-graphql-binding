@@ -4,7 +4,7 @@ description: A few examples of using the GraphQL Community Graph by Neo4j.
 
 # GraphQL Community Graph
 
-### With Multiple Bindings
+## With Multiple Bindings
 
 Using the following typeDefs for your local Neo4j server:
 
@@ -12,7 +12,10 @@ Using the following typeDefs for your local Neo4j server:
 const typeDefs = `
   type Technology @model {
     name: String! @unique
-    integration: [Technology] @relation(name: "HAPPINESS", direction: OUT)
+    integration: [Technology] @relation(
+      name: "HAPPINESS", 
+      direction: OUT
+    )
   }
 `;
 ```
@@ -92,31 +95,121 @@ server.listen().then( ({ url }) => {
 
 ```
 
-Notice the `readOnly` parameter set to `true` in the configuration object for the `twitter` binding. This is a quick way to provide the following equivalent configuration:
+Notice the `readOnly` parameter set to `true` in the configuration object for the `twitter` binding because the GraphQL Community Graph server only provides read access. 
+
+We can now __use the same auto-generated query types produced by the Neo4j-GraphQL extension to read data from the remote GraphQL Community Graph while also using a binding to manage a local Neo4j instance. 
+
+![Combined API in GraphQL Playground](.gitbook/assets/twoschemaplayground.png)
+
+### Remote Query
+
+This query obtains the first 5 most recently created Tweets that contain exactly the text "GRANDstack". 
+
+`Request`
 
 ```text
-calls: {
-  assert: false,
-  idl: false
-},
-augment: {
-  typeDefs: {
-    query: true, 
-    mutation: false
-  },
-  resolvers: {
-    query: true, 
-    mutation: false
+query {
+  Tweet(
+    first: 5, 
+    orderBy: created_desc, 
+    filter: { text_contains: "GRANDstack" }
+   ) {
+    id
+    text
   }
-},
-indexConfig: false
+}
 ```
 
-We can now __use the same auto-generated query types produced by the Neo4j-GraphQL extension to read data from the GraphQL Community Graph while also using a binding to manage a local Neo4j instance. 
+`Response`
 
-TODO include picture of resulting generated schema and reading from
+```text
+{
+  "data": {
+    "Tweet": [
+      {
+        "id": "1012693204834177024",
+        "text": "RT @sfrechette: Just found out about this today ;-) 
+        GRANDstack - Build full stack graph applications with ease. 
+        https://t.co/Mjprm3ZmHo #gr…"
+      },
+      {
+        "id": "1012690404418846720",
+        "text": "RT @sfrechette: Just found out about this today ;-) 
+        GRANDstack - Build full stack graph applications with ease. 
+        https://t.co/Mjprm3ZmHo #gr…"
+      },
+      {
+        "id": "1012377131911909376",
+        "text": "Just found out about this today ;-) GRANDstack - 
+        Build full stack graph applications with ease.… 
+        https://t.co/Q002zqbbSf"
+      },
+      {
+        "id": "1012105013399654400",
+        "text": "@BennyOgidan @neo4j There’s still time to build 
+        something for the GRANDstack hackathon!\n\n 
+        https://t.co/4gcLJQwFb5"
+      },
+      {
+        "id": "1009073016687480834",
+        "text": "RT @mesirii: The #GRANDstack blog got a little make-over.
+        Hope it makes it easier to find things.\n\n
+        https://t.co/FeDlR6MwLZ\n\nLet us know if…"
+      }
+    ]
+  }
+}
+```
 
-### Using neo4j-graphql-js
+### Local Mutation
+
+```text
+mutation {
+  createTechnology(
+    data: {
+      name: "Apollo",
+      integration: {
+        create: [
+          {
+            name: "GraphQL",
+            integration: {
+              create: [
+                {
+                  name: "Neo4j",
+                  integration: {
+                    connect: [
+                      {
+                        name: "Apollo"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ) {
+    id		
+    name
+    integration {
+      id
+      name
+      integration {
+        id
+        name
+        integration {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+```
+
+## With neo4j-graphql-js
 
 If...
 
