@@ -4,6 +4,8 @@ description: A modified example of the GRANDstack Starter project
 
 # GRANDstack Starter
 
+This is an example of the [GRANDstack Starter](https://grandstack.io/docs/getting-started.html) project that uses `Neo4jGraphQLServer`.
+
 ![Resulting GRANDstack Starter data in Neo4j Bloom](.gitbook/assets/seedgraph%20%281%29.png)
 
 The following is an overview of a modified version of the GRANDstack Starter project. You can download the fully modified version _**here**_. 
