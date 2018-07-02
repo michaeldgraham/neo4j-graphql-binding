@@ -212,7 +212,27 @@ All the same arguments as Apollo Server are supported, in addition to the follow
   * `use` \(default/only: `'cuid'`\) Configures what method to use when generating id field values.  
 * `bindingKey` \(default: `'neo4j'`\): The key used when storing the created binding into the server's context object. 
 * `log` \(default: `false`\): Logs the result of any delegated query or mutation operation, `buildNeo4jTypeDefs`,`neo4jAssertConstraints`, and `neo4jIDL`. 
-* `bindings` An object containing... 
+* `readOnly` \(default: false\): If you only have read access to a remote server, then you can use this parameter to turn off all processes that assume write access, forcing the following configuration: 
+
+```text
+calls: {
+  // Cannot update remote schema 
+  idl: false,
+  // Cannot support @unique directive
+  assert: false
+},
+augment: {
+  // Cannot support mutations
+  mutation: false
+},
+// id fields are not generated and managed because
+// we would never be able to write it to the instance
+indexConfig: false
+```
+
+* `bindings` An object of bindings where each key is the name for a binding and each value is a configuration object containing the parameters: `typeDefs`, `resolvers`, `driver`, `calls`, `augment,` `log`, and `readOnly`. This can be used to network together a GraphQL binding for multiple remote Neo4j instances with the Neo4j-GraphQL extension installed.
+
+### Default Configuration
 
 ```text
 Neo4jGraphQLServer({
@@ -233,16 +253,15 @@ Neo4jGraphQLServer({
       mutation: true
     }
   },
+  indexConfig: {
+    use: "cuid"
+  },
+  bindingKey: 'neo4j',
   log: true, 
-  bindingKey: 'neo4j'
+  bindings: {
+    ...
+  }
 });
-```
-
-Explain why / how  
-Introduce / Explain the neo4j graphql community data server, link to things
-
-```text
-full example, community data server: neo4j-graphql twitter schema
 ```
 
 ## Resources
