@@ -103,7 +103,7 @@ We can now __use the same auto-generated query types produced by the Neo4j-Graph
 
 ### Remote Query
 
-This query obtains the first 5 most recently created Tweets that contain exactly the text "GRANDstack". 
+This query obtains the first 5 most recently created `Tweet` nodes that contain exactly the text "GRANDstack". A generated `Tweet` resolver uses the `twitter` binding to delegate processing of the Tweet query type to the GraphQL Community Graph endpoint. 
 
 `Request`
 
@@ -157,54 +157,6 @@ query {
         https://t.co/FeDlR6MwLZ\n\nLet us know if…"
       }
     ]
-  }
-}
-```
-
-### Local Mutation
-
-```text
-mutation {
-  createTechnology(
-    data: {
-      name: "Apollo",
-      integration: {
-        create: [
-          {
-            name: "GraphQL",
-            integration: {
-              create: [
-                {
-                  name: "Neo4j",
-                  integration: {
-                    connect: [
-                      {
-                        name: "Apollo"
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    }
-  ) {
-    id		
-    name
-    integration {
-      id
-      name
-      integration {
-        id
-        name
-        integration {
-          id
-          name
-        }
-      }
-    }
   }
 }
 ```
