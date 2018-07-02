@@ -212,21 +212,16 @@ All the same arguments as Apollo Server are supported, in addition to the follow
   * `use` \(default/only: `'cuid'`\) Configures what method to use when generating id field values.  
 * `bindingKey` \(default: `'neo4j'`\): The key used when storing the created binding into the server's context object. 
 * `log` \(default: `false`\): Logs the result of any delegated query or mutation operation, `buildNeo4jTypeDefs`,`neo4jAssertConstraints`, and `neo4jIDL`. 
-* `readOnly` \(default: false\): If you only have read access to a remote server, then you can use this parameter to turn off all processes that assume write access, forcing the following configuration: 
+* `readOnly` \(default: false\): If you only have read access to a remote server, then you can use this parameter to turn off all processes that assume write access. Mutation types are not generated, `idl` and `assert` calls are prevented, and `id` fields are not generated and managed because we would never be able to write them to the instance. So, this results in forcing the following configuration: 
 
 ```text
-calls: {
-  // Cannot update remote schema 
+calls: { 
   idl: false,
-  // Cannot support @unique directive
   assert: false
 },
 augment: {
-  // Cannot support mutations
   mutation: false
 },
-// id fields are not generated and managed because
-// we would never be able to write it to the instance
 indexConfig: false
 ```
 
