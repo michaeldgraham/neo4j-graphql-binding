@@ -22,6 +22,8 @@ const typeDefs = `
 
 The following is a modified version of the [twitter schema](https://github.com/grand-stack/grand-stack-starter/blob/twitter/api/src/graphql-schema.js) from the [GraphQL Community Graph](http://graphql.communitygraph.org/). Each type has received a `@model` directive. There are no further changes made because the endpoint is **read-only** and thus does not allow the schema or data to be modified.
 
+### Twitter Schema
+
 ```text
 const twitterTypeDefs = `
   type Link @model {
