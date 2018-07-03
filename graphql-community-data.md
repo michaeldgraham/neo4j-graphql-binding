@@ -111,7 +111,7 @@ We can now __use the same auto-generated query types produced by the Neo4j-Graph
 
 ### Remote Query
 
-This query obtains the first 5 most recently created `Tweet` nodes that contain exactly the text "GRANDstack". A generated `Tweet` resolver uses the `twitter` binding to delegate processing of the Tweet query type to the GraphQL Community Graph endpoint. 
+This query obtains the first 5 most recently created `Tweet` nodes that contain exactly the text "GRAND". A generated `Tweet` resolver uses the `twitter` binding to delegate processing of the Tweet query type to the GraphQL Community Graph endpoint. 
 
 `Request`
 
@@ -120,7 +120,7 @@ query {
   Tweet(
     first: 5, 
     orderBy: created_desc, 
-    filter: { text_contains: "GRANDstack" }
+    filter: { text_contains: "GRAND" }
    ) {
     id
     text
