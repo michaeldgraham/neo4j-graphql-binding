@@ -24,6 +24,7 @@ The goal of this project is to use Neo4j graph databases and Apollo server and n
 
 ### Resources
 
+* Using The Neo4j-GraphQL Plugin In Neo4j Desktop [https://blog.grandstack.io/using-the-neo4j-graphql-plugin-in-neo4j-desktop-c8a60aa014d9](https://blog.grandstack.io/using-the-neo4j-graphql-plugin-in-neo4j-desktop-c8a60aa014d9) 
 * GRANDstack --  Build full stack graph applications with ease [https://grandstack.io/](https://grandstack.io/) 
 * Neo4j-GraphQL Extension --  A GraphQL-Endpoint extension for Neo4j [https://github.com/neo4j-graphql/neo4j-graphql](https://github.com/neo4j-graphql/neo4j-graphql) 
 * Using neo4j-graphql-js [https://grandstack.io/docs/neo4j-graphql-js.html](https://grandstack.io/docs/neo4j-graphql-js.html) 
