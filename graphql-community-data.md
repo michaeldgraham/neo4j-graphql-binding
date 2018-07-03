@@ -1,5 +1,5 @@
 ---
-description: A few examples of using the GraphQL Community Graph by Neo4j.
+description: A few examples of using the GraphQL Community Graph from Neo4j.
 ---
 
 # GraphQL Community Graph
