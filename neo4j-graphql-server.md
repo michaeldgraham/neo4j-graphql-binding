@@ -222,8 +222,8 @@ const typeDefs = `
       RETURN TRUE
     """)
   }
-  type schema {
-    query: Query,
+  schema {
+    query: Query
     mutation: Mutation
   }
 `;
