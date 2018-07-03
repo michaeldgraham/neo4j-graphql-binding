@@ -6,15 +6,17 @@ description: A modified example of the GRANDstack Starter project
 
 This is an example of the [GRANDstack Starter](https://grandstack.io/docs/getting-started.html) project that uses `Neo4jGraphQLServer`.
 
-![Resulting GRANDstack Starter data in Neo4j Bloom](.gitbook/assets/seedgraph%20%281%29.png)
+![GRANDstack Starter project data in Neo4j Bloom](.gitbook/assets/grandstackseedbloom.png)
 
-The following is an overview of a modified version of the GRANDstack Starter project. You can download the fully modified version _**here**_. 
+### Modifying the Schema
 
 There are a few changes to [the schema](https://github.com/grand-stack/grand-stack-starter/blob/master/api/src/graphql-schema.js) worth noting:
 
 * Each type receives a `@model` directive \(currently required by neo4j-graphql-binding to support various features\).  
 * Some fields also receive a `@unique` directive and for every model type without an `id: ID! @unique` field, one is generated and added. 
 * The Cypher statement within the `@cypher` directive for the computed `avgStars` field on the User type is written within a block string to make it easier to work with. Until they become standard, block strings for `@cypher` directive statements are supported if you use `neo4jIDL` to update your Neo4j-GraphQL schema.
+
+These changes result in the below modified `typeDefs`:
 
 ```graphql
 type User @model {
@@ -48,6 +50,10 @@ type Category @model {
   businesses: [Business] @relation(name: "IN_CATEGORY", direction: "IN")
 }
 ```
+
+### Seeding the Database
+
+![Batch mutation and generated API in GraphQL Playground](.gitbook/assets/dbseedplayground.png)
 
 Using these `typeDefs` and generated nested `create` and `connect` mutations, we can now run a modified version of [the batch mutation](https://github.com/grand-stack/grand-stack-starter/blob/master/api/src/seed/seed-mutations.js) used to seed the database:
 
