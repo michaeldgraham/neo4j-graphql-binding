@@ -18,7 +18,7 @@ In order to support the use of a `@unique` field directive, `neo4jAssertConstrai
 
 The following would result in the creation of an index and constraint on the `name` property of `Technology` nodes in your Neo4j instance.
 
-```text
+```javascript
 import { neo4jAssertConstraints } from 'neo4j-graphql-binding';
 
 const driver = neo4j.driver(
@@ -38,7 +38,7 @@ const typeDefs = /* GraphQL */`
 neo4jAssertConstraints({
   typeDefs: typeDefs,
   driver: driver,
-  log: log
+  log: true
 });
 ```
 

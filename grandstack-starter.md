@@ -16,7 +16,7 @@ There are a few changes to [the schema](https://github.com/grand-stack/grand-sta
 * Some fields also receive a `@unique` directive and for every model type without an `id: ID! @unique` field, one is generated and added. 
 * The Cypher statement within the `@cypher` directive for the computed `avgStars` field on the User type is written within a block string to make it easier to work with. Until they become standard, block strings for `@cypher` directive statements are supported if you use `neo4jIDL` to update your Neo4j-GraphQL schema.
 
-```text
+```graphql
 type User @model {
   name: String! @unique
   friends: [User] @relation(name: "FRIENDS", direction: "OUT")
@@ -51,7 +51,7 @@ type Category @model {
 
 Using these `typeDefs` and generated nested `create` and `connect` mutations, we can now run a modified version of [the batch mutation](https://github.com/grand-stack/grand-stack-starter/blob/master/api/src/seed/seed-mutations.js) used to seed the database:
 
-```text
+```graphql
 mutation {
   b1: createBusiness(data: {
     name: "KettleHouse Brewing Co.",
@@ -173,7 +173,8 @@ mutation {
         },
         {
           stars: 4,
-          text: "Best breakfast sandwich at the Farmer's Market. Always get the works.",
+          text: "Best breakfast sandwich at the Farmer's Market. 
+                Always get the works.",
           user: {
             connect: {
               name: "Will"
@@ -263,7 +264,10 @@ mutation {
     reviews: {
       create: {
         stars: 3,
-        text: "Not a great selection of books, but fortunately the inter-library loan system is good. Wifi is quite slow. Not many comfortable places to site and read. Looking forward to the new building across the street in 2020!",
+        text: "Not a great selection of books, but fortunately the 
+              inter-library loan system is good. Wifi is quite slow. 
+              Not many comfortable places to site and read. Looking 
+              forward to the new building across the street in 2020!",
         user: {
           connect: {
             name: "Will"

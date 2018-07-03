@@ -25,7 +25,7 @@ The following describes the server setup process based on the [default configura
 
 This example server setup uses only auto-generated query and mutation types.
 
-```text
+```javascript
 import { Neo4jGraphQLServer } from 'neo4j-graphql-server';
 import { v1 as neo4j } from 'neo4j-driver';
 
@@ -61,11 +61,11 @@ If you navigate to [http://localhost:4000/](http://localhost:4000/), you should 
 
 ### Nested Mutation
 
-This example uses nested create and connect mutations and takes advantage of the @unique directive to create the above graph with three Technology nodes.  
+This example uses nested [create and connect](https://www.prisma.io/docs/reference/prisma-api/mutations-ol0yuoz6go/#examples) mutations and takes advantage of the [@unique](https://www.prisma.io/docs/1.4/reference/service-configuration/data-modelling-%28sdl%29-eiroozae8u/#field-constraints) directive to create the above graph with three Technology nodes.  
   
 `Request`
 
-```text
+```graphql
  mutation {
   createTechnology(
     data: {
@@ -113,7 +113,7 @@ This example uses nested create and connect mutations and takes advantage of the
 
 `Response`
 
-```text
+```graphql
 {
   "data": {
     "createTechnology": {
@@ -148,7 +148,7 @@ Now we can run the following query:
   
 `Request`
 
-```text
+```graphql
 query {
   Technology(orderBy: name_desc) {
     id
@@ -159,7 +159,7 @@ query {
 
 `Response`
 
-```text
+```graphql
 {
   "data": {
     "Technology": [
@@ -194,7 +194,7 @@ This mutation creates a [Prism Graph](http://mathworld.wolfram.com/PrismGraph.ht
 
 `Request`
 
-```text
+```graphql
  mutation { 
 	createTechnology(
     data: {
@@ -268,7 +268,7 @@ This mutation creates a [Prism Graph](http://mathworld.wolfram.com/PrismGraph.ht
 
 ## Using Multiple Bindings
 
-See the section on using the [GraphQL Community Graph](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/drafts/-LGMw3hveOAgWUI_QtyJ/primary/graphql-community-data) for an example of configuring and using multiple bindings. 
+See the section on using the [GraphQL Community Graph](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/drafts/-LGMw3hveOAgWUI_QtyJ/primary/graphql-community-data) for an example on configuring bindings for multiple local or remote Neo4j instances with the Neo4j-GraphQL extension available.
 
 ## API Reference
 

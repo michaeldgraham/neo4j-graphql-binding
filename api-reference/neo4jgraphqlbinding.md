@@ -24,13 +24,13 @@ When you send a GraphQL request to a resolver that delegates to the binding, the
 
 ### Example
 
-```text
+```javascript
 import { neo4jGraphQLBinding } from 'neo4j-graphql-binding';
 
 const binding = neo4jGraphQLBinding({
   typeDefs: typeDefs,
   driver: driver,
-  log: false
+  log: true
 });
 
 const context = {

@@ -18,13 +18,13 @@ TODO show an example using typeDefs, with resulting neo4j-graphql extension gene
 
 TODO explain that block strings are, for now, converted down to one-liners, so you can use them to write embedded cypher more comfortably
 
-```text
+```javascript
 import { neo4jIDL } from 'neo4j-graphql-binding';
 
 neo4jIDL({
   typeDefs: typeDefs,
   driver: driver,
-  log: log
+  log: true
 });
 ```
 
