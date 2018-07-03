@@ -270,8 +270,10 @@ Check out the section on [Using the GraphQL Community Graph](https://neo4j-graph
 
 This mutation creates a [Prism Graph](http://mathworld.wolfram.com/PrismGraph.html)! 🌈
 
+![Prism Graph](.gitbook/assets/prismgraph%20%282%29.png)
+
 ```graphql
-mutation { 
+mutation {
   createTechnology(
     data: {
       name: "A",
