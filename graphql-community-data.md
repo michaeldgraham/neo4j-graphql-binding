@@ -171,13 +171,16 @@ query {
 
 ## With neo4j-graphql-js
 
-It may be that your Neo4j instance does not have the Neo4j-GraphQL endpoint available. Or perhaps the API offered by the extension does not cover everything in the database. In such cases, you can use the `neo4j-graphql-js` package to as shown in the following example.
+It may be that your Neo4j instance does not have the Neo4j-GraphQL endpoint available. Or perhaps the API offered by the extension does not cover everything in the database you want to access. In such cases, you can use the `neo4j-graphql-js` package to as shown in the following example.
 
 ### Server Setup
+
+In this scenario, you can use the original version of the twitter schema and `resolvers` that all use `neo4jgraphqljs`.
 
 ```javascript
 import { v1 as neo4j } from 'neo4j-driver';
 import { Neo4jGraphQLServer } from 'neo4j-graphql-server';
+import { neo4jgraphql } from 'neo4j-graphql-js';
 
 const driver = neo4j.driver(
   process.env.NEO4J_URI || "bolt://localhost:7687",
@@ -192,9 +195,59 @@ const GraphQLCommunityGraphDriver = neo4j.driver(
   neo4j.auth.basic("graphql", "graphql")
 );
 
+const typeDefs = `
+  type Link {
+    url: ID!
+  }
+  type TwitterUser {
+    id: ID!
+    screen_name: String!
+    name: String
+    location: String
+    followers: Int
+    following: Int
+    statuses: Int
+    profile_image_url: String
+    posted(first: Int = 10, offset: Int = 0): [Tweet] @relation(name:"POSTED", direction:"OUT")
+    }
+  type Tweet {
+    id: ID!
+    text: String
+    created: Int
+    favorites: Int
+    postedBy: TwitterUser @relation(name:"POSTED", direction:"IN")
+    mentioned: [TwitterUser] @relation(name:"MENTIONED", direction:"OUT")
+    reply: Tweet @relation(name:"REPLIED_TO", direction:"OUT")
+    retweeted: Tweet @relation(name:"RETWEETED", direction:"OUT")
+    links: [Link] @relation(name:"LINKED", direction:"OUT")
+    tags: [Tag] @relation(name:"TAGGED", direction:"OUT")
+  }
+  type Tag {
+    name: ID!
+    tagged: [Tweet] @relation(name:"TAGGED", direction:"IN")
+  }
+  type Query {
+    users(id: ID, name: String, first: Int = 10, offset: Int = 0): [TwitterUser] 
+    tweets(id: ID, text: String, first: Int = 10, offset: Int = 0): [Tweet]
+    tag(name: ID!): Tag
+  }
+`;
+
+const resolvers = {
+  Query: {
+    users: neo4jgraphql,
+    tweets: neo4jgraphql,
+    tag: neo4jgraphql
+  }
+};
+
 const server = Neo4jGraphQLServer({
   typeDefs: typeDefs,
+  resolvers: resolvers,
   driver: driver,
+  context: {
+    driver: GraphQLCommunityGraphDriver
+  },
   log: true
 });
 
@@ -202,8 +255,6 @@ server.listen().then( ({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
 });
 ```
-
-
 
 
 
