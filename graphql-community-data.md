@@ -171,11 +171,11 @@ query {
 
 ## With neo4j-graphql-js
 
-It may be that your Neo4j instance does not have the Neo4j-GraphQL endpoint available. Or perhaps the API offered by the extension does not cover everything in the database you want to access. In such cases, you can use the `neo4j-graphql-js` package to as shown in the following example.
+It may be that a Neo4j instance does not have the Neo4j-GraphQL endpoint available. Or perhaps the generated API offered by the extension does not cover everything in the database you want to access. In such cases, the `neo4j-graphql-js` package can be used to directly translate GraphQL requests to Cypher requests, as shown in the following example.
 
 ### Server Setup
 
-In this scenario, you can use the original version of the twitter schema and `resolvers` that all use `neo4jgraphqljs`.
+In this scenario, you can use the unmodified version of the twitter schema and `resolvers` that all use `neo4jgraphqljs`.
 
 ```javascript
 import { v1 as neo4j } from 'neo4j-driver';
@@ -209,7 +209,7 @@ const typeDefs = `
     statuses: Int
     profile_image_url: String
     posted(first: Int = 10, offset: Int = 0): [Tweet] @relation(name:"POSTED", direction:"OUT")
-    }
+  }
   type Tweet {
     id: ID!
     text: String
