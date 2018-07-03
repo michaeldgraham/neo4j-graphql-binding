@@ -373,7 +373,7 @@ indexConfig: false
 
 * `bindings` An object of bindings where each key is the name for a binding and each value is a configuration object containing the parameters: `typeDefs`, `resolvers`, `driver`, `calls`, `augment,` `log`, and `readOnly`. This can be used to network together a GraphQL binding for multiple remote Neo4j instances with the Neo4j-GraphQL extension installed.
 
-### Default Configuration
+#### Default Configuration
 
 ```text
 Neo4jGraphQLServer({
