@@ -262,10 +262,6 @@ server.listen().then( ({ url }) => {
 
 See the section on using the [GraphQL Community Graph](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/drafts/-LGMw3hveOAgWUI_QtyJ/primary/graphql-community-data) for an example on configuring bindings for multiple local or remote Neo4j instances with the Neo4j-GraphQL extension available.
 
-### GraphQL Community Graph
-
-Check out the section on [Using the GraphQL Community Graph](https://neo4j-graphql-binding.gitbook.io/neo4j-graphql-binding/~/edit/drafts/-LGTy1_RUSJht3S37xm7/graphql-community-data).
-
 ### Prism Graph
 
 This mutation creates a [Prism Graph](http://mathworld.wolfram.com/PrismGraph.html)! 🌈
@@ -407,8 +403,4 @@ Neo4jGraphQLServer({
   }
 });
 ```
-
-## Resources
-
-Compile all links throughout above document
 
