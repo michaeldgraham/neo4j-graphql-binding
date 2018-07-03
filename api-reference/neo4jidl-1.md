@@ -10,13 +10,9 @@ In order to update your Neo4j-GraphQL schema, you can use the `neo4jIDL`export, 
 
 * `typeDefs` \(required\): Your GraphQL type definitions in [SDL format](https://www.prisma.io/blog/graphql-sdl-schema-definition-language-6755bcb9ce51/). 
 * `driver`\(required\): Your Neo4j driver instance \(More info [here](https://www.npmjs.com/package/neo4j-driver)\). 
-* `log` \(default: `false`\): Logs result from operation. 
+* `log` \(default: `false`\): Logs result from operation.
 
 ### Example
-
-TODO show an example using typeDefs, with resulting neo4j-graphql extension generated schema from an introspection, include information about setting up an introspection; make an example of a workflow for updating your schema, then viewing the neo4j-graphql generated result with introspection
-
-TODO explain that block strings are, for now, converted down to one-liners, so you can use them to write embedded cypher more comfortably
 
 ```javascript
 import { neo4jIDL } from 'neo4j-graphql-binding';
@@ -27,6 +23,4 @@ neo4jIDL({
   log: true
 });
 ```
-
-### Resources
 
