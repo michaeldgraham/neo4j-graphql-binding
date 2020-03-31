@@ -25,7 +25,7 @@ exports.neo4jGraphQLLink = ({ typeDefs, driver, log=false, indexConfig }) => {
     });
   });
 };
-exports.getModelFieldMaps = (fields) => {
+const getModelFieldMaps = (fields) => {
   let relationMap = {};
   let propertyMap = {};
   let listMap = {};
@@ -54,7 +54,8 @@ exports.getModelFieldMaps = (fields) => {
     uniqueProperties: uniqueProperties,
     listMap: listMap
   };
-}
+};
+exports.getModelFieldMaps = getModelFieldMaps;
 
 const getOperationType = (operation) => {
   // After the binding delegates, the operation definition
