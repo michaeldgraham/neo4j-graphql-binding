@@ -140,7 +140,7 @@ exports.buildResolvers = ({ typeDefs, resolvers, query, mutation, bindingKey="ne
   }
   return augmentedResolvers;
 }
-exports.getOperationTypes = (parsed) => {
+const getOperationTypes = (parsed) => {
   const arr = parsed ? parsed.definitions : [];
   const len = arr.length;
   let i = 0;
@@ -163,7 +163,8 @@ exports.getOperationTypes = (parsed) => {
     mutation: mutation
   };
 };
-exports.buildRelationalFieldNestedInputTypes = ({ action, modelName, isForRemote }) => {
+exports.getOperationTypes = getOperationTypes;
+const buildRelationalFieldNestedInputTypes = ({ action, modelName, isForRemote }) => {
   const inputs = [];
   // TODO only add those you need, check the arity of the value...
   switch(action) {
@@ -374,7 +375,8 @@ exports.buildRelationalFieldNestedInputTypes = ({ action, modelName, isForRemote
   }
   return inputs;
 };
-exports.buildNestedMutationInputType = ({ action, modelName, modelAST, mutations, isForRemote }) => {
+exports.buildRelationalFieldNestedInputTypes = buildRelationalFieldNestedInputTypes
+const buildNestedMutationInputType = ({ action, modelName, modelAST, mutations, isForRemote }) => {
   // Prevent overwriting any existing mutation of the same name
   if(mutations.fieldMap[`${action}${modelName}`] === undefined) {
     const inputFields = [];
@@ -486,6 +488,7 @@ exports.buildNestedMutationInputType = ({ action, modelName, modelAST, mutations
   }
   return undefined;
 }
+exports.buildNestedMutationInputType = buildNestedMutationInputType;
 const buildTypeMaps = (parsed) => {
   const arr = parsed ? parsed.definitions : [];
   const len = arr.length;
@@ -522,7 +525,7 @@ const buildTypeMaps = (parsed) => {
   };
 };
 exports.buildTypeMaps = buildTypeMaps;
-exports.buildOperationMap = (parsed) => {
+const buildOperationMap = (parsed) => {
   const arr = parsed ? parsed.definitions : [];
   const len = arr.length;
   let i = 0;
@@ -552,14 +555,17 @@ exports.buildOperationMap = (parsed) => {
     mutations: mutations
   };
 };
-exports.getNamedType = (definition) => {
+exports.buildOperationMap = buildOperationMap;
+const getNamedType = (definition) => {
   let type = definition.type;
   while(type.kind !== "NamedType") type = type.type;
   return type;
-}
-exports.getFieldType = (field) => {
+};
+exports.getNamedType = getNamedType;
+const getFieldType = (field) => {
   return field ? getNamedType(field).name.value : undefined;
-}
+};
+exports.getFieldType = getFieldType;
 
 const hasDirective = (field, match) => {
   const directives = field.directives;
