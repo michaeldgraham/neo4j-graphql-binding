@@ -486,7 +486,7 @@ exports.buildNestedMutationInputType = ({ action, modelName, modelAST, mutations
   }
   return undefined;
 }
-exports.buildTypeMaps = (parsed) => {
+const buildTypeMaps = (parsed) => {
   const arr = parsed ? parsed.definitions : [];
   const len = arr.length;
   let i = 0;
@@ -521,6 +521,7 @@ exports.buildTypeMaps = (parsed) => {
     types: types
   };
 };
+exports.buildTypeMaps = buildTypeMaps;
 exports.buildOperationMap = (parsed) => {
   const arr = parsed ? parsed.definitions : [];
   const len = arr.length;
