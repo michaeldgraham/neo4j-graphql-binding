@@ -8,7 +8,7 @@ export const neo4jAssertConstraints = async ({ driver, typeDefs, log }) => {
     const constraints = buildAssertionArguments(typeDefs);
     const session = driver.session();
     return await session
-      .run(`CALL apoc.schema.assert({indexes}, {constraints}) YIELD label, key, unique, action RETURN { label: label, key: key, unique: unique, action: action }`, {
+      .run(`CALL apoc.schema.assert($indexes, $constraints) YIELD label, key, unique, action RETURN { label: label, key: key, unique: unique, action: action }`, {
         indexes: {},
         constraints: constraints
       })
@@ -33,7 +33,7 @@ export const neo4jIDL = async ({ driver, typeDefs, log }) => {
     });
     const session = driver.session();
     return await session
-      .run(`CALL graphql.idl({schema}) YIELD value RETURN value`, {schema: remoteTypeDefs})
+      .run(`CALL graphql.idl($schema) YIELD value RETURN value`, {schema: remoteTypeDefs})
       .then(function (result) {
         if(log) logIDLResult(result);
         return result;
