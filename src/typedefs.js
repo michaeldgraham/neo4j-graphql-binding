@@ -1,6 +1,6 @@
-import { parse, print } from 'graphql';
+const { parse, print } = require('graphql');
 
-export const buildTypeDefs = ({
+exports.buildTypeDefs = ({
   typeDefs,
   query=true,
   mutation=true,
@@ -98,7 +98,7 @@ export const buildTypeDefs = ({
   });
   return print(parsed);
 }
-export const buildResolvers = ({ typeDefs, resolvers, query, mutation, bindingKey="neo4j" }) => {
+exports.buildResolvers = ({ typeDefs, resolvers, query, mutation, bindingKey="neo4j" }) => {
   if(typeDefs === undefined) { throw Error(`buildNeo4jResolvers: typeDefs are undefined.`); }
   if(resolvers === undefined) { throw Error(`buildNeo4jResolvers: resolvers are undefined.`); }
   let augmentedResolvers = {};
@@ -140,7 +140,7 @@ export const buildResolvers = ({ typeDefs, resolvers, query, mutation, bindingKe
   }
   return augmentedResolvers;
 }
-export const getOperationTypes = (parsed) => {
+exports.getOperationTypes = (parsed) => {
   const arr = parsed ? parsed.definitions : [];
   const len = arr.length;
   let i = 0;
@@ -163,7 +163,7 @@ export const getOperationTypes = (parsed) => {
     mutation: mutation
   };
 };
-export const buildRelationalFieldNestedInputTypes = ({ action, modelName, isForRemote }) => {
+exports.buildRelationalFieldNestedInputTypes = ({ action, modelName, isForRemote }) => {
   const inputs = [];
   // TODO only add those you need, check the arity of the value...
   switch(action) {
@@ -374,7 +374,7 @@ export const buildRelationalFieldNestedInputTypes = ({ action, modelName, isForR
   }
   return inputs;
 };
-export const buildNestedMutationInputType = ({ action, modelName, modelAST, mutations, isForRemote }) => {
+exports.buildNestedMutationInputType = ({ action, modelName, modelAST, mutations, isForRemote }) => {
   // Prevent overwriting any existing mutation of the same name
   if(mutations.fieldMap[`${action}${modelName}`] === undefined) {
     const inputFields = [];
@@ -486,7 +486,7 @@ export const buildNestedMutationInputType = ({ action, modelName, modelAST, muta
   }
   return undefined;
 }
-export const buildTypeMaps = (parsed) => {
+exports.buildTypeMaps = (parsed) => {
   const arr = parsed ? parsed.definitions : [];
   const len = arr.length;
   let i = 0;
@@ -521,7 +521,7 @@ export const buildTypeMaps = (parsed) => {
     types: types
   };
 };
-export const buildOperationMap = (parsed) => {
+exports.buildOperationMap = (parsed) => {
   const arr = parsed ? parsed.definitions : [];
   const len = arr.length;
   let i = 0;
@@ -551,12 +551,12 @@ export const buildOperationMap = (parsed) => {
     mutations: mutations
   };
 };
-export const getNamedType = (definition) => {
+exports.getNamedType = (definition) => {
   let type = definition.type;
   while(type.kind !== "NamedType") type = type.type;
   return type;
 }
-export const getFieldType = (field) => {
+exports.getFieldType = (field) => {
   return field ? getNamedType(field).name.value : undefined;
 }
 

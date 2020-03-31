@@ -1,9 +1,8 @@
-import { Binding } from 'graphql-binding';
-import { makeRemoteExecutableSchema } from 'graphql-tools';
-import { neo4jGraphQLLink } from './link.js';
-import { buildTypeDefs } from './typedefs.js';
+const{ Binding } = require('graphql-binding');
+const { makeRemoteExecutableSchema } = require('graphql-tools');
+const { neo4jGraphQLLink } = require('./link.js');
 
-export const Neo4jGraphQLBinding = class Neo4jGraphQLBinding extends Binding {
+exports.Neo4jGraphQLBinding = class Neo4jGraphQLBinding extends Binding {
   constructor({ typeDefs, driver, log, indexConfig }) {
     super({
       schema: makeRemoteExecutableSchema({

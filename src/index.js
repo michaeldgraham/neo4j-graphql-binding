@@ -1,7 +1,7 @@
-import { parse, print } from 'graphql';
-import { getModelFieldMaps } from './link.js';
-import { Neo4jGraphQLBinding } from './binding.js';
-import { buildTypeDefs, buildOperationMap, buildTypeMaps, buildResolvers } from './typedefs.js';
+const { parse, print } = require('graphql');
+const { getModelFieldMaps } = require('./link.js');
+const { Neo4jGraphQLBinding } = require('./binding.js');
+const { buildTypeDefs, buildOperationMap, buildTypeMaps, buildResolvers } = require('./typedefs.js');
 
 export const neo4jAssertConstraints = async ({ driver, typeDefs, log }) => {
   if(driver && typeDefs) {
