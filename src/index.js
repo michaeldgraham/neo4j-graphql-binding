@@ -1,14 +1,14 @@
-import { parse, print } from 'graphql';
-import { getModelFieldMaps } from './link.js';
-import { Neo4jGraphQLBinding } from './binding.js';
-import { buildTypeDefs, buildOperationMap, buildTypeMaps, buildResolvers } from './typedefs.js';
+const { parse, print } = require('graphql');
+const { getModelFieldMaps } = require('./link.js');
+const { Neo4jGraphQLBinding } = require('./binding.js');
+const { buildTypeDefs, buildOperationMap, buildTypeMaps, buildResolvers } = require('./typedefs.js');
 
-export const neo4jAssertConstraints = async ({ driver, typeDefs, log }) => {
+exports.neo4jAssertConstraints = async ({ driver, typeDefs, log }) => {
   if(driver && typeDefs) {
     const constraints = buildAssertionArguments(typeDefs);
     const session = driver.session();
     return await session
-      .run(`CALL apoc.schema.assert({indexes}, {constraints}) YIELD label, key, unique, action RETURN { label: label, key: key, unique: unique, action: action }`, {
+      .run(`CALL apoc.schema.assert($indexes, $constraints) YIELD label, key, unique, action RETURN { label: label, key: key, unique: unique, action: action }`, {
         indexes: {},
         constraints: constraints
       })
@@ -22,7 +22,7 @@ export const neo4jAssertConstraints = async ({ driver, typeDefs, log }) => {
       });
   }
 };
-export const neo4jIDL = async ({ driver, typeDefs, log }) => {
+exports.neo4jIDL = async ({ driver, typeDefs, log }) => {
   if(driver && typeDefs) {
     const cleanedTypeDefs = cleanCypherStatements(typeDefs);
     const remoteTypeDefs = buildTypeDefs({
@@ -33,7 +33,7 @@ export const neo4jIDL = async ({ driver, typeDefs, log }) => {
     });
     const session = driver.session();
     return await session
-      .run(`CALL graphql.idl({schema}) YIELD value RETURN value`, {schema: remoteTypeDefs})
+      .run(`CALL graphql.idl($schema) YIELD value RETURN value`, {schema: remoteTypeDefs})
       .then(function (result) {
         if(log) logIDLResult(result);
         return result;
@@ -44,10 +44,10 @@ export const neo4jIDL = async ({ driver, typeDefs, log }) => {
       });
   }
 };
-export const neo4jGraphQLBinding = (config) => {
+exports.neo4jGraphQLBinding = (config) => {
   return new Neo4jGraphQLBinding(config);
 };
-export const neo4jExecute = (params, ctx, info, binding) => {
+exports.neo4jExecute = (params, ctx, info, binding) => {
   if(typeof binding !== "string") binding = "neo4j";
   switch(info.parentType.name) {
     case "Query": {
@@ -62,8 +62,8 @@ export const neo4jExecute = (params, ctx, info, binding) => {
   }
   throw Error(`Unsupported value for parentType.name`);
 }
-export const buildNeo4jTypeDefs = buildTypeDefs;
-export const buildNeo4jResolvers = buildResolvers;
+exports.buildNeo4jTypeDefs = buildTypeDefs;
+exports.buildNeo4jResolvers = buildResolvers;
 const buildAssertionArguments = (typeDefs) => {
   const parsed = parse(typeDefs);
   const models =  buildTypeMaps(parsed).models;

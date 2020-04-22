@@ -1,9 +1,9 @@
-import { ApolloLink, Observable } from 'apollo-link';
-import { print, parse } from 'graphql';
-import { buildTypeMaps, buildOperationMap, getFieldType } from './typedefs.js';
+const { ApolloLink, Observable } = require('apollo-link');
+const { print, parse } = require('graphql');
+const { buildTypeMaps, buildOperationMap, getFieldType } = require('./typedefs.js');
 const cuid = require('cuid');
 
-export const neo4jGraphQLLink = ({ typeDefs, driver, log=false, indexConfig }) => {
+exports.neo4jGraphQLLink = ({ typeDefs, driver, log=false, indexConfig }) => {
   const parsed = parse(typeDefs);
   const generatedMutations = getGeneratedMutations(parsed);
   const modelMap = buildModelMap(parsed);
@@ -25,7 +25,7 @@ export const neo4jGraphQLLink = ({ typeDefs, driver, log=false, indexConfig }) =
     });
   });
 };
-export const getModelFieldMaps = (fields) => {
+const getModelFieldMaps = (fields) => {
   let relationMap = {};
   let propertyMap = {};
   let listMap = {};
@@ -54,7 +54,8 @@ export const getModelFieldMaps = (fields) => {
     uniqueProperties: uniqueProperties,
     listMap: listMap
   };
-}
+};
+exports.getModelFieldMaps = getModelFieldMaps;
 
 const getOperationType = (operation) => {
   // After the binding delegates, the operation definition
